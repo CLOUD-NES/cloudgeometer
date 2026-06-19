@@ -15,9 +15,9 @@ class COGConverter(GDALBaseConverter):
     )
 
     def _run(self, src: str, dst: str, blocksize: int, compress: str) -> ConversionResult:
-        if len(src) > 1:
+        if not isinstance(src, str):
             raise ValueError(f"GDAL translate only accept one source, got: {src}")
-        super()._run(src=src, dst=dst, blocksize=blocksize, compress=compress)
+        return super()._run(src=src, dst=dst, blocksize=blocksize, compress=compress)
 
 
 class COGMosaicConverter(GDALBaseConverter):
