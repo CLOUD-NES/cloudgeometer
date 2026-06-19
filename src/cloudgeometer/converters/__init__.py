@@ -1,6 +1,5 @@
 from .base import ConversionProfile
-from .registry import register
-from .registry import get_converter
+from .registry import get_converter, register
 
 __all__ = [
     "ConversionProfile",

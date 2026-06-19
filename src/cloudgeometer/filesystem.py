@@ -1,6 +1,5 @@
 from pathlib import Path
-from urllib.parse import urlsplit
-from urllib.parse import urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 import fsspec
 

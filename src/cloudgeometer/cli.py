@@ -1,9 +1,8 @@
 import click
 
-from .converters import get_converter
 from .config import load_config
-from .filesystem import expand_src_and_dst_uris
-from .filesystem import file_exists
+from .converters import get_converter
+from .filesystem import expand_src_and_dst_uris, file_exists
 from .task import get_task_configs
 
 

@@ -1,5 +1,4 @@
-from .base import BaseConverter
-from .base import ConversionResult
+from .base import BaseConverter, ConversionResult
 from .gdal import GDALMixin
 from .shell import ShellMixin
 

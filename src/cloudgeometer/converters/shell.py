@@ -1,5 +1,5 @@
-import subprocess
 import shlex
+import subprocess
 from typing import Any
 
 from .base import ConversionResult
@@ -19,8 +19,7 @@ class ShellMixin:
         cwd: str | None = None,
         timeout: int = 3600,
     ) -> tuple[int, str, str]:
-        """
-        Render a command template and run it.
+        """Render a command template and run it.
 
         Template example:
             `gdal_translate -of COG -co COMPRESS={compression} -co BLOCKSIZE={blocksize} {src} {dst}`

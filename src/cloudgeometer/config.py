@@ -2,8 +2,8 @@ import copy
 import itertools
 import re
 from typing import Any
-import yaml
 
+import yaml
 
 MATRIX_RE = re.compile(r"\$\{\{\s*matrix\.([a-zA-Z0-9_]+)\s*\}\}")
 
@@ -56,8 +56,7 @@ def _expand_matrix(id: str, config: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def load_config(path: str) -> list[dict[str, Any]]:
-    """
-    Load and expand job config file.
+    """Load and expand job config file.
 
     Args:
         path (str): path to the yaml file.

@@ -18,7 +18,21 @@ def get_task_configs(
     driver: str,
     params: dict[str, Any] | None = None,
 ) -> list[TaskConfig]:
+    """Build list of task configurations.
 
+    Args:
+        id (str): task identifier
+        srcs (list[str]): source URIs
+        dsts (list[str]): destination URIs
+        driver (str): name of the driver
+        params (dict[str, Any] | None, optional): driver parameters. Defaults to None.
+
+    Raises:
+        ValueError: if the number of destination URIs differs from the number of source URIs or one
+
+    Returns:
+        list[TaskConfig]: list of task configurations.
+    """
     tasks = []
 
     if len(srcs) == len(dsts):
