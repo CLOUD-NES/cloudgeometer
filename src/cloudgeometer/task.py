@@ -30,4 +30,3 @@ def get_task_configs(
         raise ValueError("Conversions allowed are (n -> n) or (n -> 1) files.")
 
     return tasks
-

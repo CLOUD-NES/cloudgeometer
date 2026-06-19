@@ -28,13 +28,9 @@ class BaseConverter(ABC):
     """
 
     @abstractmethod
-    def _run(
-        self, src: str | list[str], dst: str, **params: dict[str, Any]
-    ) -> ConversionResult: ...
+    def _run(self, src: str | list[str], dst: str, **params: dict[str, Any]) -> ConversionResult: ...
 
-    def run(
-        self, src: str | list[str], dst: str, **params: dict[str, Any]
-    ) -> ConversionResult:
+    def run(self, src: str | list[str], dst: str, **params: dict[str, Any]) -> ConversionResult:
         """Run the conversion.
 
         Returns:

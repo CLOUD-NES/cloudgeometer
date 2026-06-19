@@ -19,7 +19,6 @@ def convert(config_file: str, dry_run: bool) -> None:
     configs = load_config(config_file)
 
     for config in configs:
-
         src = config.pop("src", None)
         dst = config.pop("dst", None)
         overwrite = config.pop("overwrite", True)
