@@ -10,11 +10,11 @@ _REGISTRY: dict[str, type[BaseConverter]] = {
 
 
 def register(name: str, driver: type[BaseConverter]):
-    """Add a conversion driver to the registry.
+    """Add a converter to the registry.
 
     Args:
         name (str): name of the converter, will be used as key in the registry
-        driver (type[BaseConverter]): converter class implementation
+        driver (type[BaseConverter]): converter class
     """
     _REGISTRY[name] = driver
 
@@ -26,7 +26,7 @@ def get_converter(name: str) -> BaseConverter:
         name (str): name of the converter
 
     Raises:
-        ValueError: if the registry does not contain the specified key
+        ValueError: if the registry does not contain a converter with the given name
 
     Returns:
         BaseConverter: converter instance
@@ -34,3 +34,12 @@ def get_converter(name: str) -> BaseConverter:
     if name not in _REGISTRY:
         raise ValueError(f"No converter registered for driver '{name}'")
     return _REGISTRY[name]()
+
+
+def list_converters() -> list[str]:
+    """List the names of the converters in the registry.
+
+    Returns:
+        list[str]: converter names
+    """
+    return list(_REGISTRY.keys())
