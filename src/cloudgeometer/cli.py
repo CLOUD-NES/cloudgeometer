@@ -7,7 +7,7 @@ from .task import get_task_configs
 
 
 @click.group()
-def main() -> None:
+def main() -> None:  # noqa: D103
     pass
 
 
@@ -15,6 +15,12 @@ def main() -> None:
 @click.argument("config_file")
 @click.option("--dry-run", is_flag=True, default=False)
 def convert(config_file: str, dry_run: bool) -> None:
+    """Run a sequence of conversion tasks.
+
+    Args:
+        config_file (str): path to the YAML configuration file
+        dry_run (bool): only check source/destinations without running the conversions
+    """
     configs = load_config(config_file)
 
     for config in configs:

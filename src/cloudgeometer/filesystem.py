@@ -66,5 +66,4 @@ def _get_path(uri: str) -> Path:
 
 
 def _looks_like_dir(path: Path) -> bool:
-    """Looks like a directory path."""
     return not path.suffix

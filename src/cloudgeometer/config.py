@@ -47,7 +47,7 @@ def _expand_matrix(id: str, config: dict[str, Any]) -> list[dict[str, Any]]:
 
     for n, combination in enumerate(itertools.product(*matrix.values())):
         expanded = copy.deepcopy(config)
-        matrix_values = dict(zip(matrix.keys(), combination))
+        matrix_values = dict(zip(matrix.keys(), combination, strict=True))
         expanded = _substitute(expanded, matrix_values)
         expanded["id"] = f"{id}-{n}"
         jobs.append(expanded)
