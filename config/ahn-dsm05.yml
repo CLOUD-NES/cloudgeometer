@@ -1,0 +1,30 @@
+jobs:
+  cog-tiles:
+    driver: cog
+    matrix:
+      blocksize: [2000, 400]
+      compress: [LZW, DEFLATE]
+    src: s3://cloud-nes-benchmarks/ahn/4/raw/DSM05/*.TIF
+    dst: s3://cloud-nes-benchmarks/ahn/4/DSM05/COG-${{ matrix.blocksize }}-${{ matrix.compress }}/
+    params:
+      blocksize: ${{ matrix.blocksize }}
+      compress: ${{ matrix.compress }}
+    overwrite: True
+  cog-mosaic:
+    driver: cog
+    matrix:
+      blocksize: [2000, 400]
+      compress: [LZW, DEFLATE]
+    src: s3://cloud-nes-benchmarks/ahn/4/raw/DSM05/*.TIF
+    dst: s3://cloud-nes-benchmarks/ahn/4/DSM05/COG-${{ matrix.blocksize }}-${{ matrix.compress }}-mosaic.TIF
+    params:
+      blocksize: ${{ matrix.blocksize }}
+      compress: ${{ matrix.compress }}
+    overwrite: False
+  # stac:
+  #   driver: stac
+  #   matrix:
+  #     blocksize: [2000, 400]
+  #     compress: [LZW, DEFLATE]
+  #   src: s3://cloud-nes-benchmarks/ahn/4/DSM05/COG-${{ matrix.blocksize }}-${{ matrix.compress }}/*.TIF
+  #   dst: s3://cloud-nes-benchmarks/ahn/4/DSM05/COG-${{ matrix.blocksize }}-${{ matrix.compress }}.parquet
