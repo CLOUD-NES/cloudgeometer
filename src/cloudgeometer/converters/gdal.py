@@ -1,4 +1,8 @@
+from typing import Any
 from urllib.parse import urlsplit
+
+from .base import BaseConverter, ConversionResult
+from .shell import ShellMixin
 
 
 class GDALMixin:
@@ -15,3 +19,35 @@ class GDALMixin:
             return split.path
         else:
             return uri
+
+
+class GDALBaseConverter(BaseConverter, ShellMixin, GDALMixin):
+    """Base class for converters that make use of GDAL CLI.
+
+    Derived classes could only overwrite the `TEMPLATE` attribute using the "{src}" and "{dst}"
+    templating strings for source and destination URIs.
+    """
+
+    TEMPLATE = "gdal --version"
+
+    def _run(
+        self,
+        src: str | list[str],
+        dst: str,
+        **params: dict[str, Any],
+    ) -> ConversionResult:
+
+        if isinstance(src, str):
+            src = [src]
+
+        src = [self._to_vsi_uri(uri) for uri in src]
+        dst = self._to_vsi_uri(dst)
+
+        context = {
+            "src": " ".join(src),
+            "dst": dst,
+            **params
+        }
+
+        rc, stdout, stderr = self.run_command(self.TEMPLATE, context)
+        return self._shell_result(rc, stdout, stderr)

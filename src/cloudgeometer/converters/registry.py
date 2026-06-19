@@ -1,8 +1,11 @@
 from .base import BaseConverter
-from .cog import COGConverter
+from .cog import COGConverter, COGMosaicConverter
+from .vrt import VRTMosaicConverter
 
 _REGISTRY: dict[str, type[BaseConverter]] = {
     "cog": COGConverter,
+    "cog-mosaic": COGMosaicConverter,
+    "vrt": VRTMosaicConverter,
 }
 
 

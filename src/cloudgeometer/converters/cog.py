@@ -1,18 +1,12 @@
-from .base import BaseConverter, ConversionResult
-from .gdal import GDALMixin
-from .shell import ShellMixin
+from .base import ConversionResult
+from .gdal import GDALBaseConverter
 
 
-class COGConverter(BaseConverter, ShellMixin, GDALMixin):
-    """COG converter based on GDAL CLI.
-
-    The conversion is carried out with `gdal raster translate` if a single
-    source file is provided, while `gdal raster mosaic` is used for multiple
-    source files.
-    """
+class COGConverter(GDALBaseConverter):
+    """COG converter based on GDAL CLI."""
 
     TEMPLATE = (
-        "gdal raster {cmd} "
+        "gdal raster translate "
         "--output-format COG "
         "--co BLOCKSIZE={blocksize} "
         "--co COMPRESS={compress} "
@@ -20,28 +14,20 @@ class COGConverter(BaseConverter, ShellMixin, GDALMixin):
         "{src} {dst} "
     )
 
-    def _run(
-        self,
-        src: str | list[str],
-        dst: str,
-        blocksize: int = 512,
-        compress: str = "LZW",
-    ) -> ConversionResult:
+    def _run(self, src: str, dst: str, blocksize: int, compress: str) -> ConversionResult:
+        if len(src) > 1:
+            raise ValueError(f"GDAL translate only accept one source, got: {src}")
+        super()._run(src=src, dst=dst, blocksize=blocksize, compress=compress)
 
-        if isinstance(src, str):
-            src = [src]
 
-        src = [self._to_vsi_uri(uri) for uri in src]
-        dst = self._to_vsi_uri(dst)
-        cmd = "translate" if len(src) == 1 else "mosaic"
+class COGMosaicConverter(GDALBaseConverter):
+    """Converter to produce a COG mosaic based on GDAL CLI."""
 
-        context = {
-            "cmd": cmd,
-            "src": " ".join(src),
-            "dst": dst,
-            "blocksize": blocksize,
-            "compress": compress,
-        }
-
-        rc, stdout, stderr = self.run_command(self.TEMPLATE, context)
-        return self._shell_result(rc, stdout, stderr)
+    TEMPLATE = (
+        "gdal raster mosaic "
+        "--output-format COG "
+        "--co BLOCKSIZE={blocksize} "
+        "--co COMPRESS={compress} "
+        "--overwrite "
+        "{src} {dst} "
+    )
