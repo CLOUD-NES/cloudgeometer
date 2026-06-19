@@ -32,3 +32,19 @@ default = { solve-group = "default" }
 [dependency-groups]
 dev = ["pytest", "ruff"]
 
+[tool.ruff]
+line-length = 120
+lint.select = [
+    "D",  # pydocstyle
+    "E",  # pycodestyle
+    "W",
+    "F",  # Pyflakes
+    "UP",  # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "I",  # isort
+]
+lint.ignore = [
+    "D100", "D101", "D104", "D105", "D106", "D107", "D203", "D213", "D413",
+]
+lint.extend-per-file-ignores = { "tests/**" = ["D103"]}  # Missing docstring in public function
