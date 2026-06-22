@@ -1,0 +1,22 @@
+from .base import ConversionResult
+from .gdal import GDALBaseConverter
+
+
+class GeoTIFFConverter(GDALBaseConverter):
+    """COG converter based on GDAL CLI."""
+
+    TEMPLATE = (
+        "gdal raster translate "
+        "--output-format GTiff "
+        "--co TILED=YES "
+        "--co BLOCKXSIZE={blocksize} "
+        "--co BLOCKYSIZE={blocksize} "
+        "--co COMPRESS={compress} "
+        "--overwrite "
+        "{src} {dst} "
+    )
+
+    def _run(self, src: str, dst: str, blocksize: int, compress: str) -> ConversionResult:
+        if not isinstance(src, str):
+            raise ValueError(f"GDAL translate only accept one source, got: {src}")
+        return super()._run(src=src, dst=dst, blocksize=blocksize, compress=compress)

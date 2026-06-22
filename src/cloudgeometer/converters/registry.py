@@ -1,8 +1,10 @@
 from .base import BaseConverter
 from .cog import COGConverter, COGMosaicConverter
+from .geotiff import GeoTIFFConverter
 from .vrt import VRTMosaicConverter
 
 _REGISTRY: dict[str, type[BaseConverter]] = {
+    "geotiff": GeoTIFFConverter,
     "cog": COGConverter,
     "cog-mosaic": COGMosaicConverter,
     "vrt": VRTMosaicConverter,
