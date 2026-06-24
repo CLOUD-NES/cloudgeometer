@@ -1,6 +1,6 @@
 [project]
 authors = [{name = "Francesco Nattino", email = "f.nattino@esciencecenter.nl"}]
-dependencies = ["click>=8.4.1,<9", "fsspec>=2026.6.0,<2027", "s3fs>=2026.6.0,<2027", "pyyaml>=6.0.3,<7"]
+dependencies = ["click>=8.4.1,<9", "fsspec>=2026.6.0,<2027", "s3fs>=2026.6.0,<2027", "pyyaml>=6.0.3,<7", "rio-stac>=0.12.0,<0.13", "pystac>=1.14.3,<2", "obstore>=0.10.1,<0.11", "rustac>=0.9.12,<0.10"]
 name = "cloudgeometer"
 requires-python = ">= 3.11"
 version = "0.1.0"
