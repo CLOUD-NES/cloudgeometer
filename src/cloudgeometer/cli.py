@@ -1,4 +1,3 @@
-from collections.abc import Iterator
 import click
 
 from .config import load_config
@@ -34,7 +33,6 @@ def convert(config_file: str, dry_run: bool) -> None:
         converter = get_converter(driver, params)
 
         for src, dst in zip(srcs, dsts, strict=True):
-
             if not overwrite and file_exists(dst):
                 continue
 

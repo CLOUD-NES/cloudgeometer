@@ -31,7 +31,11 @@ class GDALBaseConverter(BaseConverter, ShellMixin, GDALMixin):
     TEMPLATE = "gdal --version"
 
     def run(self, src: str | list[str], dst: str) -> ConversionResult:
+        """Overwrite base method to modify the source and destination URIs following GDAL notation.
 
+        GDAL CLI expects URIs within its virtual filesystem notation (e.g. "s3://path/to/file" ->
+        "/vsis3/path/to/file").
+        """
         if isinstance(src, str):
             src = [src]
 
@@ -50,11 +54,7 @@ class GDALBaseConverter(BaseConverter, ShellMixin, GDALMixin):
         params: dict[str, Any],
     ) -> ConversionResult:
 
-        context = {
-            "src": src if isinstance(src, str) else " ".join(src),
-            "dst": dst,
-            **params
-        }
+        context = {"src": src if isinstance(src, str) else " ".join(src), "dst": dst, **params}
 
         rc, stdout, stderr = self.run_command(self.TEMPLATE, context)
         return self._shell_result(rc, stdout, stderr)

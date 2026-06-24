@@ -40,10 +40,10 @@ def expand_src_and_dst_uris(src: str, dst: str) -> tuple[list[str] | list[list[s
     elif len(dsts) == 1:
         return [srcs], dsts
     else:
-        raise ValueError((
+        raise ValueError(
             "Supported conversions are mappings (N files -> N files) and reductions (N files -> 1 file). "
             f"Found {len(srcs)} sources and {len(dsts)} destination URIs instead."
-        ))
+        )
 
 
 def file_exists(uri: str):

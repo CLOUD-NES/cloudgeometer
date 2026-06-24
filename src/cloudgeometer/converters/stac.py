@@ -1,14 +1,15 @@
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
+
 import obstore
 import rio_stac
 import rustac
 
 from .base import BaseConverter, ConversionResult
 
-class RioSTACConverter(BaseConverter):
 
+class RioSTACConverter(BaseConverter):
     def _run(self, src: str | list[str], dst: str, params: dict[str, Any]) -> ConversionResult:
         src = [src] if isinstance(src, str) else src
         items = [rio_stac.create_stac_item(tile_path, **params).to_dict() for tile_path in src]
@@ -37,4 +38,3 @@ def _split_base_url(uri: str):
         url = p.parent.as_uri()
         path = p.name
     return url, path
-
