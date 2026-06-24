@@ -1,9 +1,9 @@
+from collections.abc import Iterator
 import click
 
 from .config import load_config
 from .converters import get_converter
 from .filesystem import expand_src_and_dst_uris, file_exists
-from .task import get_task_configs
 
 
 @click.group()
@@ -24,19 +24,20 @@ def convert(config_file: str, dry_run: bool) -> None:
     configs = load_config(config_file)
 
     for config in configs:
-        src = config.pop("src", None)
-        dst = config.pop("dst", None)
-        overwrite = config.pop("overwrite", True)
+        src = config.get("src", "")
+        dst = config.get("dst", "")
+        overwrite = config.get("overwrite", True)
+        driver = config.get("driver", "")
+        params = config.get("params", {})
 
         srcs, dsts = expand_src_and_dst_uris(src, dst)
-        tasks = get_task_configs(srcs=srcs, dsts=dsts, **config)
+        converter = get_converter(driver, params)
 
-        if not overwrite:
-            tasks = [task for task in tasks if not file_exists(task.dst)]
+        for src, dst in zip(srcs, dsts, strict=True):
 
-        for task in tasks:
-            converter = get_converter(task.driver)
-            print(converter)
+            if not overwrite and file_exists(dst):
+                continue
+
             if not dry_run:
-                res = converter.run(task.src, task.dst, **task.params)
+                res = converter.run(src, dst)
                 print(res)

@@ -24,18 +24,13 @@ class GDALMixin:
 class GDALBaseConverter(BaseConverter, ShellMixin, GDALMixin):
     """Base class for converters that make use of GDAL CLI.
 
-    Derived classes could only overwrite the `TEMPLATE` attribute using the "{src}" and "{dst}"
+    Derived classes can in principle only overwrite the `TEMPLATE` attribute using the "{src}" and "{dst}"
     templating strings for source and destination URIs.
     """
 
     TEMPLATE = "gdal --version"
 
-    def _run(
-        self,
-        src: str | list[str],
-        dst: str,
-        **params: dict[str, Any],
-    ) -> ConversionResult:
+    def run(self, src: str | list[str], dst: str) -> ConversionResult:
 
         if isinstance(src, str):
             src = [src]
@@ -43,8 +38,20 @@ class GDALBaseConverter(BaseConverter, ShellMixin, GDALMixin):
         src = [self._to_vsi_uri(uri) for uri in src]
         dst = self._to_vsi_uri(dst)
 
+        if len(src) == 1:
+            src = src[0]
+
+        return super().run(src=src, dst=dst)
+
+    def _run(
+        self,
+        src: str | list[str],
+        dst: str,
+        params: dict[str, Any],
+    ) -> ConversionResult:
+
         context = {
-            "src": " ".join(src),
+            "src": src if isinstance(src, str) else " ".join(src),
             "dst": dst,
             **params
         }

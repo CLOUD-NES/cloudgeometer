@@ -25,11 +25,13 @@ class BaseConverter(ABC):
 
     All converters share the same logic for timing and result wrapping.
     """
+    def __init__(self, params: dict[str, Any]) -> None:
+        self.params = params
 
     @abstractmethod
-    def _run(self, src: str | list[str], dst: str, **params: dict[str, Any]) -> ConversionResult: ...
+    def _run(self, src: str | list[str], dst: str, params: dict[str, Any]) -> ConversionResult: ...
 
-    def run(self, src: str | list[str], dst: str, **params: dict[str, Any]) -> ConversionResult:
+    def run(self, src: str | list[str], dst: str) -> ConversionResult:
         """Run the conversion.
 
         Returns:
@@ -37,7 +39,7 @@ class BaseConverter(ABC):
         """
         t0 = time.perf_counter()
         try:
-            result = self._run(src, dst, **params)
+            result = self._run(src, dst, self.params)
             result.time = time.perf_counter() - t0
             return result
         except Exception as e:
