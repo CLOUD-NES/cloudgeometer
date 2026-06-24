@@ -10,6 +10,14 @@ jobs:
       blocksize: ${{ matrix.blocksize }}
       compress: ${{ matrix.compress }}
     overwrite: False
+  cog-tiles-stac:
+    driver: rio-stac
+    matrix:
+      blocksize: [2000, 400]
+      compress: [LZW, DEFLATE]
+    src: s3://cloud-nes-benchmarks/ahn/4/DSM05/COG-${{ matrix.blocksize }}-${{ matrix.compress }}/*.TIF
+    dst: s3://cloud-nes-benchmarks/ahn/4/DSM05/items-${{ matrix.blocksize }}-${{ matrix.compress }}.parquet
+    overwrite: False
   cog-mosaic:
     driver: cog-mosaic
     matrix:
@@ -31,4 +39,4 @@ jobs:
     params:
       blocksize: ${{ matrix.blocksize }}
       compress: ${{ matrix.compress }}
-    overwrite: True
+    overwrite: False
