@@ -2899,7 +2899,7 @@ packages:
 - pypi: .
   name: cloudgeometer
   requires_dist:
-  - click
+  - click>=8.4.1,<9
   - fsspec>=2026.6.0,<2027
   - s3fs>=2026.6.0,<2027
   - pyyaml>=6.0.3,<7
