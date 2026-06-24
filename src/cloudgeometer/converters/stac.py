@@ -29,7 +29,6 @@ def _split_base_url(uri: str):
         ('file:///path/to', 'file.txt')
     """
     uri_split = urlsplit(uri)
-    # if we have
     if uri_split.scheme:
         url = urlunsplit(uri_split._replace(path=""))
         path = uri_split.path
