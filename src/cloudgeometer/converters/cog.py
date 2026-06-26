@@ -51,7 +51,6 @@ class COGMosaicConverter(GDALBaseConverter):
         }
 
 
-
 class COGTileConverter(GDALBaseConverter):
     """Converter to form retile GDAL CLI."""
 
