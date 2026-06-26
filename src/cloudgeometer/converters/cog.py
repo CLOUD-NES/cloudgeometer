@@ -12,9 +12,17 @@ class COGConverter(GDALBaseConverter):
         "--output-format COG "
         "--co BLOCKSIZE={blocksize} "
         "--co COMPRESS={compress} "
+        "--co BIGTIFF={bigtiff} "
         "--overwrite "
         "{src} {dst} "
     )
+
+    def __init__(self, blocksize: int = 512, compress: str = "LZW", bigtiff: str = "NO") -> None:
+        self.params = {
+            "blocksize": blocksize,
+            "compress": compress,
+            "bigtiff": bigtiff,
+        }
 
     def _run(self, src: str | list[str], dst: str, params: dict[str, Any]) -> ConversionResult:
         if not isinstance(src, str):
@@ -30,6 +38,41 @@ class COGMosaicConverter(GDALBaseConverter):
         "--output-format COG "
         "--co BLOCKSIZE={blocksize} "
         "--co COMPRESS={compress} "
+        "--co BIGTIFF={bigtiff} "
         "--overwrite "
         "{src} {dst} "
     )
+
+    def __init__(self, blocksize: int = 512, compress: str = "LZW", bigtiff: str = "NO") -> None:
+        self.params = {
+            "blocksize": blocksize,
+            "compress": compress,
+            "bigtiff": bigtiff,
+        }
+
+
+
+class COGTileConverter(GDALBaseConverter):
+    """Converter to form retile GDAL CLI."""
+
+    TEMPLATE = (
+        "gdal raster pipeline "
+        "  ! mosaic {src} "
+        "  ! tile "
+        "    --tiling-scheme=raster "
+        "    --tile-size={tile_size}"
+        "    --output-format=COG "
+        "    --co BLOCKSIZE={blocksize} "
+        "    --co COMPRESS={compress} "
+        "    --co BIGTIFF={bigtiff} "
+        "    --overwrite "
+        "    {dst} "
+    )
+
+    def __init__(self, tile_size: int, blocksize: int = 512, compress: str = "LZW", bigtiff: str = "NO") -> None:
+        self.params = {
+            "tile_size": tile_size,
+            "blocksize": blocksize,
+            "compress": compress,
+            "bigtiff": bigtiff,
+        }

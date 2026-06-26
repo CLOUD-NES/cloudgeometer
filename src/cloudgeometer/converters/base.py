@@ -26,7 +26,7 @@ class BaseConverter(ABC):
     All converters share the same logic for timing and result wrapping.
     """
 
-    def __init__(self, params: dict[str, Any]) -> None:
+    def __init__(self, **params: dict[str, Any]) -> None:
         self.params = params
 
     @abstractmethod

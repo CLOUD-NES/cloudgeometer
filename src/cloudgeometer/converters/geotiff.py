@@ -14,9 +14,17 @@ class GeoTIFFConverter(GDALBaseConverter):
         "--co BLOCKXSIZE={blocksize} "
         "--co BLOCKYSIZE={blocksize} "
         "--co COMPRESS={compress} "
+        "--co BIGTIFF={bigtiff} "
         "--overwrite "
         "{src} {dst} "
     )
+
+    def __init__(self, blocksize: int = 512, compress: str = "LZW", bigtiff: str = "NO") -> None:
+        self.params = {
+            "blocksize": blocksize,
+            "compress": compress,
+            "bigtiff": bigtiff,
+        }
 
     def _run(self, src: str | list[str], dst: str, params: dict[str, Any]) -> ConversionResult:
         if not isinstance(src, str):
