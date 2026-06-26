@@ -17,6 +17,9 @@ jobs:
       compress: [LZW, DEFLATE]
     src: s3://cloud-nes-benchmarks/ahn/4/DSM05/COG-${{ matrix.blocksize }}-${{ matrix.compress }}/*.TIF
     dst: s3://cloud-nes-benchmarks/ahn/4/DSM05/items-${{ matrix.blocksize }}-${{ matrix.compress }}.parquet
+    params:
+      public_hrefs: True
+      asset_media_type: 'image/tiff; application=geotiff; profile=cloud-optimized'
     overwrite: False
   cog-mosaic:
     driver: cog-mosaic
