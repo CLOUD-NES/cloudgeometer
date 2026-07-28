@@ -1,0 +1,66 @@
+[project]
+authors = [{name = "Francesco Nattino", email = "f.nattino@esciencecenter.nl"}]
+dependencies = ["click>=8.4.2,<9", "python-dotenv>=1.2.2,<2", "numpy>=2.5.1,<3", "rasterio>=1.5.0,<2", "mitmproxy>=12.2.3,<13", "rioxarray>=0.23.0,<0.24", "dask>=2026.7.1,<2027", "xarray>=2026.7.0,<2027", "kerchunk>=0.2.10,<0.3", "s3fs>=2026.6.0,<2027", "virtual-tiff>=0.5.0,<0.6"]
+name = "cloudgeometer"
+requires-python = ">= 3.11"
+version = "0.1.0"
+
+[project.scripts]
+cloudgeometer = "cloudgeometer.cli:main"
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1.1,<10",
+    "ruff>=0.16.0,<0.17",
+    "ty>=0.0.64,<0.0.65",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
+
+[tool.ruff]
+include = ["pyproject.toml", "src/**/*.py", "tests/**/*.py"]
+line-length = 100
+lint.select = [
+    "D",  # pydocstyle
+    "E",  # pycodestyle
+    "W",
+    "F",  # Pyflakes
+    "UP",  # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "I",  # isort
+]
+lint.ignore = [
+    "D100", "D101", "D104", "D105", "D106", "D107", "D203", "D213", "D413",
+]
+lint.extend-per-file-ignores = { "tests/**" = ["D103"]}  # Missing docstring in public function
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = [
+    "linux-64",
+    { platform = "osx-arm64", macos = "14.0" }
+]
+
+[tool.pixi.pypi-dependencies]
+cloudgeometer = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.feature.dev.tasks]
+test = "pytest"
+lint = "ruff check src/ && ruff format --check"
+ty = "ty check"
+
+[tool.pixi.environments]
+default = { solve-group = "default" }
+dev = { features = ["dev"], solve-group = "default" }
