@@ -27,7 +27,7 @@ class RequestLog:
 
 
 class _RequestRecorder:
-    def __init__(self, host_filter: str) -> None:
+    def __init__(self, host_filter: str = "") -> None:
         self.host_filter = host_filter
         self.request_logs: list[RequestLog] = []
 
