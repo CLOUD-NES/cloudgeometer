@@ -109,9 +109,20 @@ class RequestTracker:
 
     def _stop_proxy(self) -> None:
         if self._master is not None:
+            # DumpMaster.shutdown() stops the run loop but never closes the
+            # listening socket (Proxyserver has no shutdown hook), so the
+            # port stays bound until we close it explicitly.
+            proxyserver = self._master.addons.get("proxyserver")
+            if proxyserver is not None:
+                future = asyncio.run_coroutine_threadsafe(
+                    proxyserver.servers.update([]), self._master.event_loop
+                )
+                with contextlib.suppress(Exception):
+                    future.result(timeout=5)
             self._master.shutdown()
         if self._thread is not None:
             self._thread.join(timeout=5)
+        self._master = None
 
     def _set_env(self) -> None:
         proxy_url = f"http://{self._host}:{self._port}"
