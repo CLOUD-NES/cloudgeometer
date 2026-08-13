@@ -70,5 +70,3 @@ class RequestTracker:
     def total_bytes(self) -> int:
         """Total response bytes across all logged requests."""
         return sum(r.bytes for r in self.request_logs)
-
-

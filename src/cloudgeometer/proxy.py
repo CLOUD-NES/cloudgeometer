@@ -71,19 +71,20 @@ class _RequestLogger:
 
 class _ProxyProcess(multiprocessing.Process):
     def __init__(
-            self,
-            host: str,
-            port: int,
-            host_filter: str,
-            stop: multiprocessing.synchronize.Event,
-            queue: multiprocessing.Queue,
+        self,
+        host: str,
+        port: int,
+        host_filter: str,
+        stop: multiprocessing.synchronize.Event,
+        queue: multiprocessing.Queue,
+        daemon: bool = True,
     ) -> None:
         self.host = host
         self.port = port
         self.host_filter = host_filter
         self.stop = stop
         self.queue = queue
-        super().__init__(daemon=True)
+        super().__init__(daemon=daemon)
 
     async def _run(self) -> None:
         request_logger = _RequestLogger(self.queue, host_filter=self.host_filter)
@@ -104,14 +105,13 @@ class _ProxyProcess(multiprocessing.Process):
 
 
 class Proxy:
-
     host: str = "127.0.0.1"
 
     def __init__(
-            self,
-            host_filter: str = "",
-            port: int | None = None,
-            ca_cert: str | pathlib.Path | None = None,
+        self,
+        host_filter: str = "",
+        port: int | None = None,
+        ca_cert: str | pathlib.Path | None = None,
     ) -> None:
         self.host_filter: str = host_filter
         self.port: int = DEFAULT_PROXY_PORT if port is None else port
@@ -126,7 +126,14 @@ class Proxy:
         self._queue: multiprocessing.Queue = multiprocessing.Queue()
         self._request_logs: list[RequestLog] = []
 
-    def start(self) -> None:
+    def start(self, timeout: float = 5.0) -> None:
+        """Start the proxy.
+
+        After starting the proxy in a daemon process, wait for the proxy to start.
+
+        Args:
+            timeout (float): seconds to wait for the proxy to start.
+        """
         self._stop = multiprocessing.Event()
         self._process = _ProxyProcess(
             self.host,
@@ -134,17 +141,16 @@ class Proxy:
             self.host_filter,
             self._stop,
             self._queue,
+            daemon=True,
         )
         self._process.start()
-        self._wait_until_listening()
+        self._wait_until_listening(timeout=timeout)
 
-    def _wait_until_listening(self, timeout: float = 5.0) -> None:
+    def _wait_until_listening(self, timeout: float) -> None:
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             if self._process is not None and not self._process.is_alive():
-                raise RuntimeError(
-                    f"mitmproxy exited early with code {self._process.exitcode}"
-                )
+                raise RuntimeError(f"mitmproxy exited early with code {self._process.exitcode}")
             with (
                 contextlib.suppress(OSError),
                 socket.create_connection((self.host, self.port), timeout=0.2),
@@ -153,18 +159,31 @@ class Proxy:
             time.sleep(0.05)
         raise RuntimeError("mitmproxy did not start listening in time")
 
-    def stop(self) -> None:
+    def stop(self, timeout: float = 5.0) -> None:
+        """Stop the proxy.
+
+        Send a signal to gracefully shutdown the proxy process. If unresponsive,
+        send a SIGTERM signal to terminate the process.
+
+        Args:
+            timeout (float): seconds to wait for the graceful shutdown of the proxy.
+        """
         if self._stop is not None:
             self._stop.set()
         if self._process is not None:
-            self._process.join(timeout=5)
+            self._process.join(timeout=timeout)
             if self._process.is_alive():
                 self._process.terminate()
-                self._process.join(timeout=5)
+                self._process.join(timeout=timeout)
             self._process = None
 
     @property
     def request_logs(self) -> list[RequestLog]:
+        """Request logs.
+
+        Returns:
+            list[RequestLog]
+        """
         request_logs = self._drain_queue()
         if request_logs:
             self._request_logs.extend(request_logs)
@@ -183,4 +202,3 @@ class Proxy:
     def url(self) -> str:
         """Proxy URL."""
         return f"http://{self.host}:{self.port}"
-

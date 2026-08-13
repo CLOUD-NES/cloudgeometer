@@ -6,7 +6,7 @@ import dotenv
 from .accessors import guess_accessors, list_accessors
 from .benchmark import Benchmark
 from .config import parse_config_file
-from .tracker import DEFAULT_PROXY_PORT
+from .proxy import DEFAULT_PROXY_PORT
 
 logger = logging.getLogger(__name__)
 
