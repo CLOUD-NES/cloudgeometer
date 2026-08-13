@@ -56,6 +56,9 @@ lint.ignore = [
 ]
 lint.extend-per-file-ignores = { "tests/**" = ["D103"]}  # Missing docstring in public function
 
+[tool.ty]
+src.include = ["./src"]
+
 [tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = [
