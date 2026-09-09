@@ -1,6 +1,5 @@
 import asyncio
 import contextlib
-import dataclasses
 import multiprocessing
 import multiprocessing.synchronize
 import pathlib
@@ -11,35 +10,10 @@ import time
 
 from mitmproxy import addons, http, master, options
 
+from .log import RequestLog, RequestLogCollection
+
 DEFAULT_PROXY_PORT = 8080
 DEFAULT_CA_CERT = pathlib.Path.home() / ".mitmproxy" / "mitmproxy-ca-cert.pem"
-
-
-@dataclasses.dataclass(frozen=True)
-class RequestLog:
-    """A logged HTTP request/response."""
-
-    method: str
-    url: str
-    status: int
-    bytes: int
-    range: str | None
-
-
-class _Master(master.Master):
-    """The master handles mitmproxy's main event loop.
-
-    This implementation already register the default addons.
-    """
-
-    def __init__(
-        self,
-        options: options.Options,
-        loop: asyncio.AbstractEventLoop | None = None,
-        with_termlog: bool = True,
-    ) -> None:
-        super().__init__(options, event_loop=loop, with_termlog=with_termlog)
-        self.addons.add(*addons.default_addons())
 
 
 class _RequestLogger:
@@ -67,6 +41,22 @@ class _RequestLogger:
                 range=flow.request.headers.get("Range"),
             )
         )
+
+
+class _Master(master.Master):
+    """The master handles mitmproxy's main event loop.
+
+    This implementation already register the default addons.
+    """
+
+    def __init__(
+        self,
+        options: options.Options,
+        loop: asyncio.AbstractEventLoop | None = None,
+        with_termlog: bool = True,
+    ) -> None:
+        super().__init__(options, event_loop=loop, with_termlog=with_termlog)
+        self.addons.add(*addons.default_addons())
 
 
 class _ProxyProcess(multiprocessing.Process):
@@ -124,7 +114,7 @@ class Proxy:
         self._process: multiprocessing.Process | None = None
         self._stop: multiprocessing.synchronize.Event | None = None
         self._queue: multiprocessing.Queue = multiprocessing.Queue()
-        self._request_logs: list[RequestLog] = []
+        self._request_logs: RequestLogCollection = RequestLogCollection()
 
     def start(self, timeout: float = 5.0) -> None:
         """Start the proxy.
@@ -178,11 +168,11 @@ class Proxy:
             self._process = None
 
     @property
-    def request_logs(self) -> list[RequestLog]:
-        """Request logs.
+    def request_logs(self) -> RequestLogCollection:
+        """Collection of request logs.
 
         Returns:
-            list[RequestLog]
+            RequestLogCollection
         """
         request_logs = self._drain_queue()
         if request_logs:

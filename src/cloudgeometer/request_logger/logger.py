@@ -3,7 +3,8 @@ from pathlib import Path
 from types import TracebackType
 from typing import Self
 
-from .proxy import Proxy, RequestLog
+from .log import RequestLogCollection
+from .proxy import Proxy
 
 
 class RequestLogger:
@@ -62,11 +63,6 @@ class RequestLogger:
                 os.environ[key] = value
 
     @property
-    def request_logs(self) -> list[RequestLog]:
-        """Logged requests."""
+    def logs(self) -> RequestLogCollection:
+        """Logs of the tracked requests."""
         return self._proxy.request_logs
-
-    @property
-    def total_bytes(self) -> int:
-        """Total response bytes across all logged requests."""
-        return sum(r.bytes for r in self.request_logs)
