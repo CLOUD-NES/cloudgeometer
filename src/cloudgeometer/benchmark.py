@@ -5,7 +5,7 @@ from typing import Any
 
 from .accessors import get_accessor
 from .timer import Timer
-from .tracker import RequestLog, RequestTracker
+from .request_logger import RequestLog, RequestLogger
 
 logger = logging.getLogger(__name__)
 
@@ -59,10 +59,10 @@ class Benchmark:
 
         # TODO: implement host filter?
         cm = (
-            RequestTracker(port=self.proxy_port) if self.network_stats else contextlib.nullcontext()
+            RequestLogger(port=self.proxy_port) if self.network_stats else contextlib.nullcontext()
         )
 
-        with cm as tracker, Timer() as timer:
+        with cm as request_logger, Timer() as timer:
             try:
                 data = accessor.load()
                 print(data)
@@ -74,7 +74,7 @@ class Benchmark:
         return BenchmarkResult(
             success=True,
             time=timer.elapsed_time,
-            request_logs=tracker.request_logs if tracker is not None else None,
+            request_logs=request_logger.request_logs if request_logger is not None else None,
         )
 
     def run(self):

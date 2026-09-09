@@ -6,7 +6,7 @@ from typing import Self
 from .proxy import Proxy, RequestLog
 
 
-class RequestTracker:
+class RequestLogger:
     """Track HTTP/HTTPS requests."""
 
     def __init__(
