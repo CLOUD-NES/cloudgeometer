@@ -46,7 +46,7 @@ def cli(
     "--num-runs",
     type=int,
     default=1,
-    help="Number of times the task is repeated to accumulate statistics."
+    help="Number of times the task is repeated to accumulate statistics.",
 )
 @click.option(
     "--log-requests",
@@ -60,12 +60,7 @@ def cli(
     default=DEFAULT_PROXY_PORT,
     help="Port which the proxy to log requests will listen to.",
 )
-@click.option(
-    "--json",
-    is_flag=True,
-    default=False,
-    help="Write output as JSON."
-)
+@click.option("--json", is_flag=True, default=False, help="Write output as JSON.")
 @click.pass_obj
 def run(
     s3_config: S3Config,

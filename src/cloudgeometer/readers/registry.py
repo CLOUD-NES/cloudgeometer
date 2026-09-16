@@ -8,7 +8,8 @@ from .rasterio import RasterioReader
 from .rioxarray import RioxarrayReader
 
 _REGISTRY: dict[str, type[BaseReader]] = {
-    cls.NAME: cls for cls in (
+    cls.NAME: cls
+    for cls in (
         AsyncGeotiffReader,
         GeopandasPyarrowReader,
         IcechunkReader,
@@ -33,7 +34,7 @@ def get_reader(
     name: str,
     proxy_url: str | None = None,
     proxy_ca_cert_file: str | None = None,
-    s3_config: S3Config | None = None
+    s3_config: S3Config | None = None,
 ) -> BaseReader:
     """Get an instance of the reader.
 

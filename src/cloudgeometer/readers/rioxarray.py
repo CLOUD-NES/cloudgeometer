@@ -22,7 +22,7 @@ class RioxarrayReader(BaseReader):
         # need to use as a context manager to avoid rasterio>=1.5 error: https://github.com/rasterio/rasterio/issues/3563
         with (
             rasterio_env(self.proxy_url, self.proxy_ca_cert_file, self.s3_config),
-            rioxarray.open_rasterio(href, cache=False) as da, # type: ignore
+            rioxarray.open_rasterio(href, cache=False) as da,  # type: ignore
         ):
             if bbox is not None:
                 da = da.rio.clip_box(*bbox)

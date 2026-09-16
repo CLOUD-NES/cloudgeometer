@@ -7,7 +7,7 @@ import pyarrow.fs
 from ..s3 import S3Config
 from .base import BaseReader
 
-DEFAULT_REQUEST_TIMEOUT = 20 # seconds
+DEFAULT_REQUEST_TIMEOUT = 20  # seconds
 
 
 class GeopandasPyarrowReader(BaseReader):
@@ -27,16 +27,11 @@ class GeopandasPyarrowReader(BaseReader):
             href,
             proxy_url=self.proxy_url,
             proxy_ca_file_path=self.proxy_ca_cert_file,
-            s3_config=self.s3_config
+            s3_config=self.s3_config,
         )
         bbox: tuple | None = params.get("bbox")
         columns: tuple | None = params.get("columns")
-        return geopandas.read_parquet(
-            href,
-            bbox=bbox,
-            columns=columns,
-            filesystem=filesystem
-        )
+        return geopandas.read_parquet(href, bbox=bbox, columns=columns, filesystem=filesystem)
 
 
 def _setup_filesystem_if_s3(

@@ -42,13 +42,13 @@ def _open_repository(uri: str, s3_config: S3Config) -> icechunk.Repository:
             anonymous=s3_config.is_anonymous,
         )
         credentials = icechunk.containers_credentials(
-           {
-               f"s3://{bucket}/": icechunk.s3_credentials(
-                   access_key_id=s3_config.access_key_id,
-                   secret_access_key=s3_config.secret_access_key,
-                   anonymous=s3_config.is_anonymous,
-               )
-           }
+            {
+                f"s3://{bucket}/": icechunk.s3_credentials(
+                    access_key_id=s3_config.access_key_id,
+                    secret_access_key=s3_config.secret_access_key,
+                    anonymous=s3_config.is_anonymous,
+                )
+            }
         )
     else:
         raise NotImplementedError()

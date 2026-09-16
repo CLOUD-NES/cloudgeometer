@@ -11,7 +11,9 @@ from ..s3 import S3Config
 from .base import BaseReader
 
 
-async def _async_geotiff_read(prefix: str, store: ObjectStore, bbox: tuple[float, float, float, float] | None = None) -> np.ndarray:
+async def _async_geotiff_read(
+    prefix: str, store: ObjectStore, bbox: tuple[float, float, float, float] | None = None
+) -> np.ndarray:
     geotiff = await GeoTIFF.open(prefix, store=store)
     if bbox:
         raise NotImplementedError()
@@ -30,7 +32,10 @@ class AsyncGeotiffReader(BaseReader):
     def _read(self, href: str, params: dict[str, Any]) -> np.ndarray:
         """Load the full dataset, or a subset within a bounding box."""
         store, prefix = _set_up_store_and_prefix(
-            href=href, proxy_url=self.proxy_url, proxy_ca_cert_file=self.proxy_ca_cert_file, s3_config=self.s3_config
+            href=href,
+            proxy_url=self.proxy_url,
+            proxy_ca_cert_file=self.proxy_ca_cert_file,
+            s3_config=self.s3_config,
         )
         return asyncio.run(_async_geotiff_read(prefix, store))
 
@@ -63,13 +68,7 @@ def _set_up_store_and_prefix(
         if proxy_ca_cert_file is not None:
             client_options["proxy_ca_certificate"] = proxy_ca_cert_file.read_text()
 
-        store = S3Store(
-            bucket=href_split.netloc,
-            client_options=client_options,
-            **s3_options
-        )
+        store = S3Store(bucket=href_split.netloc, client_options=client_options, **s3_options)
         return store, href_split.path.lstrip("/")
     else:
         raise ValueError(f"Unknown scheme for href: {href}")
-
-

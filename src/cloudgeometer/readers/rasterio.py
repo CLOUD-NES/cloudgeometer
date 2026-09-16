@@ -27,7 +27,6 @@ class RasterioReader(BaseReader):
             rasterio_env(self.proxy_url, self.proxy_ca_cert_file, self.s3_config),
             rasterio.open(href) as dataset,
         ):
-
             if bbox is not None:
                 kwargs["window"] = from_bounds(*bbox, transform=dataset.transform)
             return dataset.read(**kwargs)
@@ -49,7 +48,7 @@ def rasterio_env(
     """
     env = {
         "GDAL_DISABLE_READDIR_ON_OPEN": True,
-        "AWS_NO_SIGN_REQUEST": "YES" if s3_config.is_anonymous else "NO"
+        "AWS_NO_SIGN_REQUEST": "YES" if s3_config.is_anonymous else "NO",
     }
     if proxy_url is not None:
         env["GDAL_HTTPS_PROXY"] = proxy_url
