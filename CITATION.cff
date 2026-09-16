@@ -1,0 +1,25 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: cloudgeometer
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Francesco
+    family-names: Nattino
+    email: f.nattino@esciencecenter.nl
+    affiliation: Netherlands eScience Center
+    orcid: 'https://orcid.org/0000-0003-3286-0139'
+repository-code: 'https://github.com/CLOUD-NES/cloudgeometer'
+abstract: >
+  Cloudgeometer is a tool to facilitate running data access
+  geospatial benchmarks on cloud-native infrastructure.
+keywords:
+  - cloud-native
+  - s3
+  - benchmark
+  - geospatial data
+license: Apache-2.0
