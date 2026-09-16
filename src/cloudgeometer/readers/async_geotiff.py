@@ -7,6 +7,7 @@ import numpy as np
 from async_geotiff import GeoTIFF
 from obstore.store import LocalStore, ObjectStore, S3Store
 
+from ..s3 import S3Config
 from .base import BaseReader
 
 
@@ -34,7 +35,9 @@ class AsyncGeotiffReader(BaseReader):
         return asyncio.run(_async_geotiff_read(prefix, store))
 
 
-def _set_up_store_and_prefix(href, proxy_url, proxy_ca_cert_file, s3_config) -> tuple[ObjectStore, str]:
+def _set_up_store_and_prefix(
+    href: str, proxy_url: str | None, proxy_ca_cert_file: pathlib.Path | None, s3_config: S3Config
+) -> tuple[ObjectStore, str]:
     href_split = urlsplit(href)
     scheme = href_split.scheme
     if not scheme or scheme == "file":
