@@ -1,3 +1,4 @@
+from collections.abc import Generator
 from contextlib import contextmanager
 from typing import Any
 
@@ -33,13 +34,18 @@ class RasterioReader(BaseReader):
 
 
 @contextmanager
-def rasterio_env(proxy_url: str | None, proxy_ca_file_path: str | None, s3_config: S3Config):
+def rasterio_env(
+    proxy_url: str | None, proxy_ca_file_path: str | None, s3_config: S3Config
+) -> Generator[None]:
     """Set up the rasterio environment, including proxy and S3 configurations.
 
     Args:
-        proxy_url (str | None):
-        proxy_ca_file_path (str | None):
-        s3_config (S3Config):
+        proxy_url (str | None): URL address of the proxy for request logging
+        proxy_ca_file_path (str | None): path to the proxy certificates
+        s3_config (S3Config): configuration parameters for S3 access
+
+    Yields:
+        None: control is yielded within the configured rasterio environment
     """
     env = {
         "GDAL_DISABLE_READDIR_ON_OPEN": True,
