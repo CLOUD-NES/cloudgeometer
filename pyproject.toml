@@ -1,24 +1,27 @@
 [project]
 authors = [{name = "Francesco Nattino", email = "f.nattino@esciencecenter.nl"}]
 dependencies = [
-    "click>=8.4.2,<9",
-    "python-dotenv>=1.2.2,<2",
-    "numpy>=2.5.1,<3",
-    "rasterio>=1.5.0,<2",
+    "click>=8.5.0,<9",
+    "numpy>=2.5.3,<3",
+    "rasterio>=1.5.1,<2",
     "mitmproxy>=12.2.3,<13",
     "rioxarray>=0.23.0,<0.24",
     "xarray>=2026.7.0,<2027",
     "kerchunk>=0.2.10,<0.3",
     "s3fs>=2026.7.0,<2027",
     "virtual-tiff>=0.5.0,<0.6",
-    "icechunk>=2.1.2,<3",
+    "icechunk>=2.2.0,<3",
+    "async-geotiff>=0.5.1,<0.6",
+    "geopandas>=1.1.4,<2",
+    "pyarrow>=25.0.1,<26",
+    "obstore>=0.11.1,<0.12",
 ]
 name = "cloudgeometer"
 requires-python = ">= 3.12"
 version = "0.1.0"
 
 [project.scripts]
-cloudgeometer = "cloudgeometer.cli:main"
+cloudgeometer = "cloudgeometer.cli:cli"
 
 [build-system]
 build-backend = "hatchling.build"
@@ -27,8 +30,8 @@ requires = ["hatchling"]
 [project.optional-dependencies]
 dev = [
     "pytest>=9.1.1,<10",
-    "ruff>=0.16.0,<0.17",
-    "ty>=0.0.64,<0.0.65",
+    "ruff>=0.16.7,<0.17",
+    "ty>=0.0.80,<0.0.81",
 ]
 
 [tool.pytest.ini_options]
