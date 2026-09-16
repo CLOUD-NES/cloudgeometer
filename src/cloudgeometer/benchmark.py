@@ -32,6 +32,10 @@ class BenchmarkResults:
     def __len__(self) -> int:
         return len(self.runs)
 
+    def __repr__(self) -> str:
+        num_failed_runs = len([r for r in self.runs if not r.success])
+        return f"<BenchmarkResults: {len(self)} runs ({num_failed_runs} failed)>"
+
     def summary(self, verbose=False) -> str:
         """Print a human-readable summary of the benchmark results."""
         return str(self.runs)
