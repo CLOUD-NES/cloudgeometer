@@ -52,7 +52,7 @@ def rasterio_env(proxy_url: str | None, proxy_ca_file_path: str | None, s3_confi
     if s3_config.access_key_id is not None:
         env["AWS_ACCESS_KEY_ID"] = s3_config.access_key_id
     if s3_config.secret_access_key is not None:
-        env["AWS_SECRET_ACCESS_KEY"] = s3_config.secret_access_key,
+        env["AWS_SECRET_ACCESS_KEY"] = s3_config.secret_access_key
     if s3_config.region is not None:
         env["AWS_REGION"] = s3_config.region
     if s3_config.endpoint_url is not None:
