@@ -357,6 +357,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/b8/0c/51f6841f1d84f404f92463fc2b1ba0da357ca1e3db6b7fbda26956c3b82a/ruamel_yaml-0.19.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bb/69/96feeac84ce0b871567225c78515f3b557c023e72ed9b4f1833f3662bd6b/obspec-0.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/be/8a/2f6a967f30cdcd938dce5873e67c33e01c1a0a80f951abdd25a86f547d80/virtualizarr-2.7.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/c7/b2/c9fba5b4ed7f63f26e83432fa2062ca04606b61dce7bbacc1238232af649/ty-0.0.81-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/c9/12/a8aecc40296cb30e8011e1bb50c9916bb3b46a8bef89e3f3223cc9715477/virtual_tiff-0.5.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cc/d7/97d3136f81db489ec8d1d67748c110d6c994268fd7528014aa9f2b085e4e/cffi-2.1.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
@@ -374,7 +375,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/f3/b9/c348b19ab3845e177f08f51965db4b70ecd0563b114dbc5dcc4971b20cf9/async_geotiff-0.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f5/73/31c1bf0f3384062751c2094dadb314916d70aa9b6bfd26d994b4a7b393fa/wrapt-2.3.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/f8/95/16dd90805fc7e53ec54ae9fdb1a8b74753fb159a55a170f60f49b9417824/ty-0.0.80-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/fa/de/ceae2adf7034e07e9910299fe412e1819c4f0dd520700a888bcb03625448/pandas-3.0.5-cp314-cp314-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fd/3c/6a2bf344106328fd04963664a60b9bb6496fc25df8e962fcdc1367285fb9/fsspec-2026.7.0-py3-none-any.whl
@@ -483,7 +483,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/c9/12/a8aecc40296cb30e8011e1bb50c9916bb3b46a8bef89e3f3223cc9715477/virtual_tiff-0.5.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cb/b1/3846dd7f199d53cb17f49cba7e651e9ce294d8497c8c150530ed11865bb8/iniconfig-2.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d6/5c/584e626835f0375c928176c04137c96927165cb8733cdb3150ec04e5ee5e/cffi-2.1.0-cp314-cp314-macosx_11_0_arm64.whl
-      - pypi: https://files.pythonhosted.org/packages/db/8d/fd141160567047b742e466be8ed09a4c4ed80fa045d37f946eb4f4532fee/ty-0.0.80-py3-none-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/dd/1a/5d9a402b39ec892d856bbdd9db502ff73ce28cdf4aff72eb1ce1d6843506/universal_pathlib-0.3.10-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/df/80/fc9d01d5ed37ba4c42ca2b55b4339ae6e200b456be3a1aaddf4a9fa99b8c/pyperclip-1.11.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/df/b2/87e62e8c3e2f4b32e5fe99e0b86d576da1312593b39f47d8ceef365e95ed/packaging-26.2-py3-none-any.whl
@@ -494,6 +493,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/f1/4f/733c48f270565d78b4544f2baddc2fb2a245e5a8640254b12c36ac7ac68e/multidict-6.7.1-cp314-cp314-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/f3/b9/c348b19ab3845e177f08f51965db4b70ecd0563b114dbc5dcc4971b20cf9/async_geotiff-0.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/f8/5f/b8fe3ab7eee87bbf1f5ff1b65c55526a3f31a9604630bc9e7d84199bbac5/ty-0.0.81-py3-none-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fd/3c/6a2bf344106328fd04963664a60b9bb6496fc25df8e962fcdc1367285fb9/fsspec-2026.7.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fe/7f/7f77310e810ab3ee47357e4ce1bdafc05d429e411bad63c0e546ceef2f2e/mitmproxy_macos-0.12.11-py3-none-any.whl
@@ -1058,7 +1058,7 @@ packages:
   - obstore>=0.11.1,<0.12
   - pytest>=9.1.1,<10 ; extra == 'dev'
   - ruff>=0.16.7,<0.17 ; extra == 'dev'
-  - ty>=0.0.80,<0.0.81 ; extra == 'dev'
+  - ty>=0.0.81,<0.0.82 ; extra == 'dev'
   requires_python: '>=3.12'
 - pypi: https://files.pythonhosted.org/packages/03/68/68ada9c8aea96ded09a66cfd9bf87aa6db8c2edebe93f5bf9b66b0143fbc/pyproj-3.7.2-cp314-cp314-macosx_14_0_arm64.whl
   name: pyproj
@@ -2204,6 +2204,11 @@ packages:
   requires_dist:
   - obspec>=0.1.0
   requires_python: '>=3.10'
+- pypi: https://files.pythonhosted.org/packages/c7/b2/c9fba5b4ed7f63f26e83432fa2062ca04606b61dce7bbacc1238232af649/ty-0.0.81-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+  name: ty
+  version: 0.0.81
+  sha256: f37a8f66c444eea29f17adfe0664f42062520773f18031fd4913f28eb56d2966
+  requires_python: '>=3.8'
 - pypi: https://files.pythonhosted.org/packages/c9/12/a8aecc40296cb30e8011e1bb50c9916bb3b46a8bef89e3f3223cc9715477/virtual_tiff-0.5.0-py3-none-any.whl
   name: virtual-tiff
   version: 0.5.0
@@ -2292,11 +2297,6 @@ packages:
   - numcodecs ; extra == 'test'
   - kerchunk ; extra == 'test'
   requires_python: '>=3.12'
-- pypi: https://files.pythonhosted.org/packages/db/8d/fd141160567047b742e466be8ed09a4c4ed80fa045d37f946eb4f4532fee/ty-0.0.80-py3-none-macosx_11_0_arm64.whl
-  name: ty
-  version: 0.0.80
-  sha256: da4062e0fbf3923d9b71688157c5753394f243348f00732e9edbb27498397169
-  requires_python: '>=3.8'
 - pypi: https://files.pythonhosted.org/packages/dd/1a/5d9a402b39ec892d856bbdd9db502ff73ce28cdf4aff72eb1ce1d6843506/universal_pathlib-0.3.10-py3-none-any.whl
   name: universal-pathlib
   version: 0.3.10
@@ -2440,10 +2440,10 @@ packages:
   - pytest ; extra == 'dev'
   - setuptools ; extra == 'dev'
   requires_python: '>=3.9'
-- pypi: https://files.pythonhosted.org/packages/f8/95/16dd90805fc7e53ec54ae9fdb1a8b74753fb159a55a170f60f49b9417824/ty-0.0.80-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+- pypi: https://files.pythonhosted.org/packages/f8/5f/b8fe3ab7eee87bbf1f5ff1b65c55526a3f31a9604630bc9e7d84199bbac5/ty-0.0.81-py3-none-macosx_11_0_arm64.whl
   name: ty
-  version: 0.0.80
-  sha256: fe95feffa7156800c6f804195acb9fb5846a39671c7192c30fff23351aaf7c31
+  version: 0.0.81
+  sha256: 480c78706ba78239f901d68cf1ba53e98b84aa51e19b9241daa0fb62fdecd2e2
   requires_python: '>=3.8'
 - pypi: https://files.pythonhosted.org/packages/fa/de/ceae2adf7034e07e9910299fe412e1819c4f0dd520700a888bcb03625448/pandas-3.0.5-cp314-cp314-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl
   name: pandas
