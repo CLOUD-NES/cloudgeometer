@@ -24,7 +24,9 @@ class BaseReader(ABC):
         s3_config: S3Config | None = None,
     ) -> None:
         self.proxy_url = proxy_url
-        self.proxy_ca_cert_file = Path(proxy_ca_cert_file) if proxy_ca_cert_file is not None else None
+        self.proxy_ca_cert_file = (
+            Path(proxy_ca_cert_file) if proxy_ca_cert_file is not None else None
+        )
         self.s3_config = s3_config or S3Config()
 
     @classmethod
