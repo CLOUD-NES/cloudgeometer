@@ -29,7 +29,7 @@ class BenchmarkResults:
 
     runs: list[RunResults] = dataclasses.field(default_factory=list)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.runs)
 
     def summary(self, verbose=False) -> str:
