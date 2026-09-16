@@ -60,6 +60,7 @@ def cli(
     default=DEFAULT_PROXY_PORT,
     help="Port which the proxy to log requests will listen to.",
 )
+@click.option("--verbose", is_flag=True, default=False, help="Increase verbosity of the output.")
 @click.option("--json", is_flag=True, default=False, help="Write output as JSON.")
 @click.pass_obj
 def run(
@@ -69,6 +70,7 @@ def run(
     num_runs: int,
     log_requests: bool,
     proxy_port: int,
+    verbose: bool,
     json: bool,
 ):
     """Run a benchmark using one of the implemented readers.
@@ -89,6 +91,6 @@ def run(
         s3_config=s3_config,
     )
     if not json:
-        click.echo(result.summary())
+        click.echo(result.summary(verbose=verbose))
     else:
         click.echo(result.as_json())
