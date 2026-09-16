@@ -57,7 +57,11 @@ lint.select = [
 lint.ignore = [
     "D100", "D101", "D104", "D105", "D106", "D107", "D203", "D213", "D413",
 ]
-lint.extend-per-file-ignores = { "tests/**" = ["D103"]}  # Missing docstring in public function
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/**" = [
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+]
 
 [tool.ty]
 src.include = ["./src"]
