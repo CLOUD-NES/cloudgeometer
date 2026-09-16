@@ -13,6 +13,7 @@ class RequestLogger:
     def __init__(
         self,
         host_filter: str = "",
+        set_proxy_env_vars: bool = True,
         ca_cert: str | Path | None = None,
         port: int | None = None,
     ) -> None:
@@ -21,11 +22,13 @@ class RequestLogger:
             port=port,
             ca_cert=ca_cert,
         )
+        self.set_proxy_env_vars = set_proxy_env_vars
         self._old_env: dict[str, str | None] = {}
 
     def __enter__(self) -> Self:
         self._proxy.start()
-        self._set_env()
+        if self.set_proxy_env_vars:
+            self._set_env()
         return self
 
     def __exit__(
@@ -34,16 +37,17 @@ class RequestLogger:
         exc_val: BaseException | None,
         traceback: TracebackType | None,
     ) -> None:
-        self._restore_env()
+        if self.set_proxy_env_vars:
+            self._restore_env()
         self._proxy.stop()
 
     def _set_env(self) -> None:
-        proxy_url = self._proxy.url
-        ca_cert_file = str(self._proxy.ca_cert)
-        ca_cert_dir = str(self._proxy.ca_cert.parent)
+        proxy_url = self.proxy_url
+        ca_cert_file = str(self.proxy_ca_cert_file)
+        ca_cert_dir = str(self.proxy_ca_cert_file.parent)
         updates = {
-            "HTTP_PROXY": proxy_url,
-            "HTTPS_PROXY": proxy_url,
+            "HTTP_PROXY": self.proxy_url,
+            "HTTPS_PROXY": self.proxy_url,
             "http_proxy": proxy_url,
             "https_proxy": proxy_url,
             "SSL_CERT_DIR": ca_cert_dir,
@@ -61,6 +65,16 @@ class RequestLogger:
                 os.environ.pop(key, None)
             else:
                 os.environ[key] = value
+
+    @property
+    def proxy_url(self) -> str:
+        """URL address of the proxy."""
+        return self._proxy.url
+
+    @property
+    def proxy_ca_cert_file(self) -> Path:
+        """Location of the proxy trusted CA certificates."""
+        return self._proxy.ca_cert
 
     @property
     def logs(self) -> RequestLogCollection:

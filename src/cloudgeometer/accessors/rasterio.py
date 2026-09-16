@@ -1,7 +1,11 @@
+from contextlib import contextmanager
+from typing import Any
+
 import numpy as np
 import rasterio
 from rasterio.windows import from_bounds
 
+from ..s3 import S3Config
 from .base import BaseAccessor
 
 
@@ -11,11 +15,47 @@ class RasterioAccessor(BaseAccessor):
     [rasterio]: https://rasterio.readthedocs.io
     """
 
-    def load(self, bbox: tuple[float, float, float, float] | None = None) -> np.ndarray:
+    NAME: str = "rasterio"
+    PARAMS: tuple = ("bbox",)
+
+    def _run(self, href: str, params: dict[str, Any]) -> np.ndarray:
         """Load the full dataset, or a subset within a bounding box."""
-        with rasterio.open(self.href, **self.params) as dataset:
-            if not bbox:
-                return dataset.read()
-            else:
-                window = from_bounds(*bbox, transform=dataset.transform)
-                return dataset.read(window=window)
+        kwargs = {}
+        bbox = params.get("bbox")
+        with (
+            rasterio_env(self.proxy_url, self.proxy_ca_cert_file, self.s3_config),
+            rasterio.open(href) as dataset,
+        ):
+
+            if bbox is not None:
+                kwargs["window"] = from_bounds(*bbox, transform=dataset.transform)
+            return dataset.read(**kwargs)
+
+
+@contextmanager
+def rasterio_env(proxy_url: str | None, proxy_ca_file_path: str | None, s3_config: S3Config):
+    """Set up the rasterio environment, including proxy and S3 configurations.
+
+    Args:
+        proxy_url (str | None):
+        proxy_ca_file_path (str | None):
+        s3_config (S3Config):
+    """
+    env = {
+        "GDAL_DISABLE_READDIR_ON_OPEN": True,
+        "AWS_NO_SIGN_REQUEST": "YES" if s3_config.is_anonymous else "NO"
+    }
+    if proxy_url is not None:
+        env["GDAL_HTTPS_PROXY"] = proxy_url
+    if proxy_ca_file_path is not None:
+        env["GDAL_CURL_CA_BUNDLE"] = proxy_ca_file_path
+    if s3_config.access_key_id is not None:
+        env["AWS_ACCESS_KEY_ID"] = s3_config.access_key_id
+    if s3_config.secret_access_key is not None:
+        env["AWS_SECRET_ACCESS_KEY"] = s3_config.secret_access_key,
+    if s3_config.region is not None:
+        env["AWS_REGION"] = s3_config.region
+    if s3_config.endpoint_url is not None:
+        env["AWS_S3_ENDPOINT"] = s3_config.endpoint_url
+    with rasterio.Env(**env):
+        yield

@@ -1,5 +1,7 @@
+from .log import RequestLogCollection
 from .logger import RequestLogger
 
 __all__ = [
-    "RequestLogger"
+    "RequestLogCollection",
+    "RequestLogger",
 ]

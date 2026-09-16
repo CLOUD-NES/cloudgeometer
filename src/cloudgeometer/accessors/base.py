@@ -1,20 +1,48 @@
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Mapping
 from typing import Any
 
-import numpy as np
+from ..s3 import S3Config
 
 
 class BaseAccessor(ABC):
-    def __init__(self, href: str, params: dict[str, Any] | None = None) -> None:
-        self.href = href
-        self.params = params or {}
+    """Base class for the data accessors.
+
+    Derived classes should implement the argument-free `read` function. In order to provide
+    parameters to the accessor, use the `params` argument (the `PARAMS` class attribute should list
+    the parameters supported by the accessor). The `NAME` attribute defines the name of the accessor.
+    """
+
+    NAME: str = "base"
+    PARAMS: tuple = ()
+
+    def __init__(
+        self,
+        proxy_url: str | None = None,
+        proxy_ca_cert_file: str | None = None,
+        s3_config: S3Config | None = None,
+    ) -> None:
+        self.proxy_url = proxy_url
+        self.proxy_ca_cert_file = proxy_ca_cert_file
+        self.s3_config = s3_config or S3Config()
+
+    @classmethod
+    def check_params(cls, params: str | Iterable[str] | Mapping):
+        """Check whether the class implements one or multiple parameters for reading."""
+        if isinstance(params, str):
+            params = (params,)
+        elif isinstance(params, Mapping):
+            params = params.keys()
+        for p in params:
+            if p not in cls.PARAMS:
+                raise ValueError(f"Parameter {p} not supported by accessor {cls.NAME}")
 
     @abstractmethod
-    def load(self, bbox: tuple[float, float, float, float] | None = None) -> np.ndarray:
-        """Load the full dataset, or a subset within a bounding box.
-
-        Args:
-            bbox: Bounding box (left, bottom, right, top) in the dataset's
-                own CRS. If None, the full dataset is read.
-        """
+    def _run(self, href: str, params: dict[str, Any]) -> Any:
+        """Actual data accessor implementation."""
         ...
+
+    def run(self, href: str, params: dict[str, Any]) -> Any:
+        """Run the accessor, with some optional filters/configuration parameters."""
+        self.check_params(params=params)
+        return self._run(href=href, params=params)

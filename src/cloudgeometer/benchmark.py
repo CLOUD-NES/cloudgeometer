@@ -1,92 +1,126 @@
-import contextlib
-import logging
-from dataclasses import dataclass
+import dataclasses
+import json
+from collections.abc import Callable
 from typing import Any
 
 from .accessors import get_accessor
+from .request_logger import RequestLogCollection, RequestLogger
+from .request_logger.proxy import DEFAULT_PROXY_PORT
+from .s3 import S3Config
 from .timer import Timer
-from .request_logger import RequestLog, RequestLogger
-
-logger = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
-class BenchmarkResult:
+@dataclasses.dataclass
+class RunResults:
+    """Results of a benchmark run."""
+
     success: bool
     time: float | None = None
-    request_logs: list[RequestLog] | None = None
+    request_logs: RequestLogCollection | None = None
     error: str | None = None
 
-    def summary(self, verbose=True) -> None:
+
+@dataclasses.dataclass(frozen=True)
+class BenchmarkResults:
+    """Results of a benchmark.
+
+    A benchmark can entails several runs.
+    """
+
+    runs: list[RunResults] = dataclasses.field(default_factory=list)
+
+    def __len__(self):
+        return len(self.runs)
+
+    def summary(self, verbose=False) -> str:
         """Print a human-readable summary of the benchmark results."""
-        if self.success:
-            print("Successful run.")
-        else:
-            print(f"Failed with error:\n{self.error}")
-            return
-        if self.time is not None:
-            print(f"Timing: {self.time}")
-        if self.request_logs is not None:
-            num_requests = len(self.request_logs)
-            total_bytes = sum([r.bytes for r in self.request_logs])
-            print(f"{num_requests} requests, {total_bytes} bytes transferred")
-            if verbose:
-                for r in self.request_logs:
-                    range_part = f" range={r.range}" if r.range else ""
-                    print(f"  {r.method:5s} {r.status} {r.bytes:>10d}B{range_part}  {r.url}")
+        return str(self.runs)
+
+    def as_json(self) -> str:
+        """Return benchmark results as a JSON-serialized string."""
+        return json.dumps([dataclasses.asdict(run) for run in self.runs])
 
 
 class Benchmark:
+    """Setup and run a benchmark using one of the accessors.
+
+    Args:
+        href (str): URL path to the dataset.
+        accessor (str): name of the accessor (should be one returned by `list_accessors()`).
+        accessor_params (dict[str, Any] | None, optional): optional parameters supported by the
+            accessor. Defaults to None.
+        num_runs (int, optional): include this number of runs in the benchmark. Defaults to 1.
+        log_requests (bool, optional): monitor and log the HTTP requests fired by the accessor.
+            Defaults to False.
+        proxy_port (int, optional): port which the proxy used to log HTTP requests should listen to.
+            Defaults to DEFAULT_PROXY_PORT.
+        s3_config (S3Config | None, optional): configuration parameters for S3 access. Defaults to
+            None.
+    """
+
     def __init__(
         self,
-        id: str,
         href: str,
         accessor: str,
-        network_stats: bool = False,
         accessor_params: dict[str, Any] | None = None,
-        proxy_port: int | None = None,
+        num_runs: int = 1,
+        log_requests: bool = False,
+        proxy_port: int = DEFAULT_PROXY_PORT,
+        s3_config: S3Config | None = None,
     ):
-        self.id = id
         self.href = href
         self.accessor = accessor
-        self.network_stats = network_stats
         self.accessor_params = accessor_params or {}
+        self.num_runs = num_runs
+        self.log_requests = log_requests
         self.proxy_port = proxy_port
-        self.result: BenchmarkResult | None = None
+        self.s3_config = s3_config or S3Config()
 
-    def _run(self):
-        accessor = get_accessor(self.accessor, href=self.href, params=self.accessor_params)
-
-        # TODO: implement host filter?
-        cm = (
-            RequestLogger(port=self.proxy_port) if self.network_stats else contextlib.nullcontext()
-        )
-
-        with cm as request_logger, Timer() as timer:
+    # @staticmethod
+    def _run(self, func: Callable, func_kwargs: dict[str, Any]) -> RunResults:
+        error = None
+        with Timer() as timer:
             try:
-                data = accessor.load()
-                print(data)
+                _ = func(**func_kwargs)
             except Exception as e:
-                return BenchmarkResult(
-                    success=False,
-                    error=str(e),
-                )
-        return BenchmarkResult(
-            success=True,
+                error = str(e)
+        return RunResults(
+            success=error is None,
             time=timer.elapsed_time,
-            request_logs=request_logger.request_logs if request_logger is not None else None,
+            error=error,
         )
+
+    def _run_accessor(self, proxy_url=None, proxy_ca_cert_file=None):
+        accessor = get_accessor(
+            self.accessor,
+            proxy_url=proxy_url,
+            proxy_ca_cert_file=proxy_ca_cert_file,
+            s3_config=self.s3_config
+        )
+        kwargs = {"href": self.href, "params": self.accessor_params}
+        results = self._run(func=accessor.run, func_kwargs=kwargs)
+        return results
+
+
+    def _run_accessor_with_request_logger(
+        self,
+    ) -> RunResults:
+        with RequestLogger(port=self.proxy_port, set_proxy_env_vars=False) as logger:
+            results = self._run_accessor(
+                proxy_url=logger.proxy_url, proxy_ca_cert_file=logger.proxy_ca_cert_file
+            )
+        results.request_logs = logger.logs
+        return results
 
     def run(self):
-        """Run the benchmark."""
-        self.result = self._run()
+        """Run the benchmark.
 
-    def summary(self):
-        """Print a summary of the benchmark.
-
-        Requires `Benchmark.run` to be called first.
+        Returns:
+            BenchmarkResults: results of the benchmark.
         """
-        if self.result:
-            self.result.summary()
-        else:
-            logger.warning("Benchmark contains no result yet. Call `Benchmark.run` first.")
+        runs = []
+        for _ in range(self.num_runs):
+            runs.append(
+                self._run_accessor_with_request_logger() if self.log_requests else self._run_accessor()
+            )
+        return BenchmarkResults(runs=runs)

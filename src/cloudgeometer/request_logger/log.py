@@ -16,11 +16,11 @@ class RequestLog:
     range: str | None
 
 
+@dataclasses.dataclass
 class RequestLogCollection:
     """A collection of request logs."""
 
-    def __init__(self):
-        self._request_logs: list[RequestLog] = []
+    request_logs: list[RequestLog] = dataclasses.field(default_factory=list)
 
     def extend(self, request_logs: list[RequestLog]) -> None:
         """Extend the collection with the given request logs.
@@ -28,7 +28,7 @@ class RequestLogCollection:
         Args:
             request_logs (list[RequestLog]): logged requests.
         """
-        self._request_logs.extend(request_logs)
+        self.request_logs.extend(request_logs)
 
     @property
     def total_bytes(self) -> int:
@@ -37,7 +37,7 @@ class RequestLogCollection:
         Returns:
             int: total response bytes
         """
-        return sum(r.bytes for r in self._request_logs)
+        return sum(r.bytes for r in self.request_logs)
 
     def to_df(self) -> pandas.DataFrame:
         """Return the collection as a pandas DataFrame.
@@ -45,11 +45,11 @@ class RequestLogCollection:
         Returns:
             DataFrame: table of logged requests
         """
-        return pandas.DataFrame([dataclasses.asdict(log) for log in self._request_logs])
+        return pandas.DataFrame([dataclasses.asdict(log) for log in self.request_logs])
 
     def __len__(self) -> int:
-        return len(self._request_logs)
+        return len(self.request_logs)
 
     def __repr__(self) -> str:
         size = as_human_readable_size(self.total_bytes)
-        return f"<{len(self)} requests, {size} response size>"
+        return f"<{len(self)} requests, response size: {size}>"
