@@ -5,11 +5,11 @@ import icechunk
 import xarray
 
 from ..s3 import S3Config
-from .base import BaseAccessor
+from .base import BaseReader
 
 
-class IcechunkAccessor(BaseAccessor):
-    """Data loader based on [xarray] and [icechunk].
+class IcechunkReader(BaseReader):
+    """Data reader based on [xarray] and [icechunk].
 
     [xarray]: https://docs.xarray.dev/
     [icechunk]: https://icechunk.io
@@ -17,7 +17,7 @@ class IcechunkAccessor(BaseAccessor):
 
     NAME = "icechunk"
 
-    def _run(self, href: str, params: dict[str, Any]) -> Any:
+    def _read(self, href: str, params: dict[str, Any]) -> Any:
         """Load the full dataset, or a subset within a bounding box."""
         repo = _open_repository(href, self.s3_config)
         session = repo.readonly_session("main")

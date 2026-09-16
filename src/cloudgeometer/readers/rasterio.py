@@ -6,11 +6,11 @@ import rasterio
 from rasterio.windows import from_bounds
 
 from ..s3 import S3Config
-from .base import BaseAccessor
+from .base import BaseReader
 
 
-class RasterioAccessor(BaseAccessor):
-    """Data loader based on [rasterio].
+class RasterioReader(BaseReader):
+    """Data reader based on [rasterio].
 
     [rasterio]: https://rasterio.readthedocs.io
     """
@@ -18,7 +18,7 @@ class RasterioAccessor(BaseAccessor):
     NAME: str = "rasterio"
     PARAMS: tuple = ("bbox",)
 
-    def _run(self, href: str, params: dict[str, Any]) -> np.ndarray:
+    def _read(self, href: str, params: dict[str, Any]) -> np.ndarray:
         """Load the full dataset, or a subset within a bounding box."""
         kwargs = {}
         bbox = params.get("bbox")

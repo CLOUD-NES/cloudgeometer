@@ -2,10 +2,10 @@ import logging
 
 import click
 
-from ..accessors import list_accessors
+from ..readers import list_readers
 from ..request_logger.proxy import DEFAULT_PROXY_PORT
-from ..s3 import S3Config, get_s3_config
-from .accessor import run_accessor_benchmark
+from ..s3 import S3Config
+from .run import run_reader_benchmark
 
 
 @click.group()
@@ -27,7 +27,7 @@ def cli(
     """Set up and run data access benchmarks."""
     if debug:
         logging.basicConfig(level=logging.DEBUG)
-    ctx.obj = get_s3_config(
+    ctx.obj = S3Config.from_env(
         endpoint_url=endpoint_url,
         region=region,
         access_key_id=access_key_id,
@@ -38,9 +38,9 @@ def cli(
 @cli.command()
 @click.argument("href", type=str)
 @click.option(
-    "--accessor",
-    type=click.Choice(list_accessors(), case_sensitive=False),
-    help="Accessors(s) used for the benchmark.",
+    "--reader",
+    type=click.Choice(list_readers(), case_sensitive=False),
+    help="Reader(s) used for the benchmark.",
 )
 @click.option(
     "--num-runs",
@@ -70,20 +70,20 @@ def cli(
 def run(
     s3_config: S3Config,
     href: str,
-    accessor: str,
+    reader: str,
     num_runs: int,
     log_requests: bool,
     proxy_port: int,
     json: bool,
 ):
-    """Run a benchmark using one of the implemented accessors.
+    """Run a benchmark using one of the implemented readers.
 
-    Provide the URL/path to the local or remote dataset, select an accessor, and, optionally, one or
+    Provide the URL/path to the local or remote dataset, select a reader, and, optionally, one or
     more configuration parameters.
     """
-    result = run_accessor_benchmark(
+    result = run_reader_benchmark(
         href=href,
-        accessor=accessor,
+        reader=reader,
         bbox=None,
         band=None,
         columns=None,

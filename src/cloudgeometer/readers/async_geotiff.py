@@ -7,7 +7,7 @@ import numpy as np
 from async_geotiff import GeoTIFF
 from obstore.store import LocalStore, ObjectStore, S3Store
 
-from .base import BaseAccessor
+from .base import BaseReader
 
 
 async def _async_geotiff_read(prefix: str, store: ObjectStore, bbox: tuple[float, float, float, float] | None = None) -> np.ndarray:
@@ -18,15 +18,15 @@ async def _async_geotiff_read(prefix: str, store: ObjectStore, bbox: tuple[float
     return array.data
 
 
-class AsyncGeotiffAccessor(BaseAccessor):
-    """Data accessor based on [async-geotiff][async-geotiff].
+class AsyncGeotiffReader(BaseReader):
+    """Data reader based on [async-geotiff][async-geotiff].
 
     [async-geotiff]: https://developmentseed.org/async-geotiff
     """
 
     NAME = "async-geotiff"
 
-    def _run(self, href: str, params: dict[str, Any]) -> np.ndarray:
+    def _read(self, href: str, params: dict[str, Any]) -> np.ndarray:
         """Load the full dataset, or a subset within a bounding box."""
         store, prefix = _set_up_store_and_prefix(
             href=href, proxy_url=self.proxy_url, proxy_ca_cert_file=self.proxy_ca_cert_file, s3_config=self.s3_config

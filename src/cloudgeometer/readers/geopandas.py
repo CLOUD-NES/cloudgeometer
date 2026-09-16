@@ -5,12 +5,12 @@ import geopandas
 import pyarrow.fs
 
 from ..s3 import S3Config
-from .base import BaseAccessor
+from .base import BaseReader
 
 DEFAULT_REQUEST_TIMEOUT = 20 # seconds
 
 
-class GeopandasPyarrowAccessor(BaseAccessor):
+class GeopandasPyarrowReader(BaseReader):
     """Data loader based on [geopandas.read_parquet], which is based on [pyarrow].
 
     [geopandas.read_parquet]: https://geopandas.org/en/stable/docs/reference/api/geopandas.read_parquet.html
@@ -20,7 +20,7 @@ class GeopandasPyarrowAccessor(BaseAccessor):
     NAME: str = "geopandas-pyarrow"
     PARAMS: tuple = ("bbox", "columns")
 
-    def _run(self, href: str, params: dict[str, Any]) -> geopandas.GeoDataFrame:
+    def _read(self, href: str, params: dict[str, Any]) -> geopandas.GeoDataFrame:
         """Load the dataset or a subset of columns, optionally filtering using a bounding box."""
         # if the pyarrow filesystem is passed to geopandas, strip the protocol and any leading "/"
         href, filesystem = _setup_filesystem_if_s3(

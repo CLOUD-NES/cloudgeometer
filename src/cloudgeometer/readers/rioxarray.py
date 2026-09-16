@@ -3,12 +3,12 @@ from typing import Any
 import numpy as np
 import rioxarray
 
-from .base import BaseAccessor
+from .base import BaseReader
 from .rasterio import rasterio_env
 
 
-class RioxarrayAccessor(BaseAccessor):
-    """Data loader based on [rioxarray][rioxarray].
+class RioxarrayReader(BaseReader):
+    """Data reader based on [rioxarray][rioxarray].
 
     [rioxarray]: https://corteva.github.io/rioxarray
     """
@@ -16,7 +16,7 @@ class RioxarrayAccessor(BaseAccessor):
     NAME: str = "rioxarray"
     PARAMS: tuple = ("bbox",)
 
-    def _run(self, href: str, params: dict[str, Any]) -> np.ndarray:
+    def _read(self, href: str, params: dict[str, Any]) -> np.ndarray:
         """Load the full dataset, or a subset within a bounding box."""
         bbox = params.get("bbox")
         # need to use as a context manager to avoid rasterio>=1.5 error: https://github.com/rasterio/rasterio/issues/3563

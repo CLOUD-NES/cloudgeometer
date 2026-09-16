@@ -5,9 +5,9 @@ from ..request_logger.proxy import DEFAULT_PROXY_PORT
 from ..s3 import S3Config
 
 
-def run_accessor_benchmark(
+def run_reader_benchmark(
     href: str,
-    accessor: str,
+    reader: str,
     bbox: tuple | None = None,
     band: str | None = None,
     columns: tuple | None = None,
@@ -17,12 +17,12 @@ def run_accessor_benchmark(
     proxy_port: int = DEFAULT_PROXY_PORT,
     s3_config: S3Config | None = None,
 ) -> BenchmarkResults:
-    """Perform a benchmark run with the selected accessor."""
-    accessor_params = _get_accessor_params(bbox=bbox, band=band, columns=columns, group=group)
+    """Perform a benchmark run with the selected reader."""
+    reader_params = _get_reader_params(bbox=bbox, band=band, columns=columns, group=group)
     benchmark = Benchmark(
         href=href,
-        accessor=accessor,
-        accessor_params=accessor_params,
+        reader=reader,
+        reader_params=reader_params,
         log_requests=log_requests,
         num_runs=num_runs,
         proxy_port=proxy_port,
@@ -31,5 +31,5 @@ def run_accessor_benchmark(
     return benchmark.run()
 
 
-def _get_accessor_params(**kwargs: Any) -> dict[str, Any]:
+def _get_reader_params(**kwargs: Any) -> dict[str, Any]:
     return {k: v for k, v in kwargs.items() if v is not None}

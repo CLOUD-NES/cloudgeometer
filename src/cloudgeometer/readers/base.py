@@ -5,12 +5,12 @@ from typing import Any
 from ..s3 import S3Config
 
 
-class BaseAccessor(ABC):
-    """Base class for the data accessors.
+class BaseReader(ABC):
+    """Base class for the data readers.
 
-    Derived classes should implement the argument-free `read` function. In order to provide
-    parameters to the accessor, use the `params` argument (the `PARAMS` class attribute should list
-    the parameters supported by the accessor). The `NAME` attribute defines the name of the accessor.
+    Derived classes should implement the argument-free `_read` function. In order to provide
+    parameters to the reader, use the `params` argument (the `PARAMS` class attribute should list
+    the parameters supported by the reader). The `NAME` attribute defines the name of the reader.
     """
 
     NAME: str = "base"
@@ -35,14 +35,14 @@ class BaseAccessor(ABC):
             params = params.keys()
         for p in params:
             if p not in cls.PARAMS:
-                raise ValueError(f"Parameter {p} not supported by accessor {cls.NAME}")
+                raise ValueError(f"Parameter {p} not supported by reader {cls.NAME}")
 
     @abstractmethod
-    def _run(self, href: str, params: dict[str, Any]) -> Any:
-        """Actual data accessor implementation."""
+    def _read(self, href: str, params: dict[str, Any]) -> Any:
+        """Actual data reader implementation."""
         ...
 
-    def run(self, href: str, params: dict[str, Any]) -> Any:
-        """Run the accessor, with some optional filters/configuration parameters."""
+    def read(self, href: str, params: dict[str, Any]) -> Any:
+        """Read the dataset, with some optional filters/configuration parameters."""
         self.check_params(params=params)
-        return self._run(href=href, params=params)
+        return self._read(href=href, params=params)

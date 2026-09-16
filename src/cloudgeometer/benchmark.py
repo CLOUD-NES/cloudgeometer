@@ -3,7 +3,7 @@ import json
 from collections.abc import Callable
 from typing import Any
 
-from .accessors import get_accessor
+from .readers import get_reader
 from .request_logger import RequestLogCollection, RequestLogger
 from .request_logger.proxy import DEFAULT_PROXY_PORT
 from .s3 import S3Config
@@ -42,15 +42,15 @@ class BenchmarkResults:
 
 
 class Benchmark:
-    """Setup and run a benchmark using one of the accessors.
+    """Setup and run a benchmark using one of the readers.
 
     Args:
         href (str): URL path to the dataset.
-        accessor (str): name of the accessor (should be one returned by `list_accessors()`).
-        accessor_params (dict[str, Any] | None, optional): optional parameters supported by the
-            accessor. Defaults to None.
+        reader (str): name of the reader (should be one returned by `list_readers()`).
+        reader_params (dict[str, Any] | None, optional): optional parameters supported by the
+            reader. Defaults to None.
         num_runs (int, optional): include this number of runs in the benchmark. Defaults to 1.
-        log_requests (bool, optional): monitor and log the HTTP requests fired by the accessor.
+        log_requests (bool, optional): monitor and log the HTTP requests fired by the reader.
             Defaults to False.
         proxy_port (int, optional): port which the proxy used to log HTTP requests should listen to.
             Defaults to DEFAULT_PROXY_PORT.
@@ -61,16 +61,16 @@ class Benchmark:
     def __init__(
         self,
         href: str,
-        accessor: str,
-        accessor_params: dict[str, Any] | None = None,
+        reader: str,
+        reader_params: dict[str, Any] | None = None,
         num_runs: int = 1,
         log_requests: bool = False,
         proxy_port: int = DEFAULT_PROXY_PORT,
         s3_config: S3Config | None = None,
     ):
         self.href = href
-        self.accessor = accessor
-        self.accessor_params = accessor_params or {}
+        self.reader = reader
+        self.reader_params = reader_params or {}
         self.num_runs = num_runs
         self.log_requests = log_requests
         self.proxy_port = proxy_port
@@ -90,23 +90,23 @@ class Benchmark:
             error=error,
         )
 
-    def _run_accessor(self, proxy_url=None, proxy_ca_cert_file=None):
-        accessor = get_accessor(
-            self.accessor,
+    def _run_reader(self, proxy_url=None, proxy_ca_cert_file=None):
+        reader = get_reader(
+            self.reader,
             proxy_url=proxy_url,
             proxy_ca_cert_file=proxy_ca_cert_file,
             s3_config=self.s3_config
         )
-        kwargs = {"href": self.href, "params": self.accessor_params}
-        results = self._run(func=accessor.run, func_kwargs=kwargs)
+        kwargs = {"href": self.href, "params": self.reader_params}
+        results = self._run(func=reader.read, func_kwargs=kwargs)
         return results
 
 
-    def _run_accessor_with_request_logger(
+    def _run_reader_with_logging(
         self,
     ) -> RunResults:
         with RequestLogger(port=self.proxy_port, set_proxy_env_vars=False) as logger:
-            results = self._run_accessor(
+            results = self._run_reader(
                 proxy_url=logger.proxy_url, proxy_ca_cert_file=logger.proxy_ca_cert_file
             )
         results.request_logs = logger.logs
@@ -121,6 +121,6 @@ class Benchmark:
         runs = []
         for _ in range(self.num_runs):
             runs.append(
-                self._run_accessor_with_request_logger() if self.log_requests else self._run_accessor()
+                self._run_reader_with_logging() if self.log_requests else self._run_reader()
             )
         return BenchmarkResults(runs=runs)

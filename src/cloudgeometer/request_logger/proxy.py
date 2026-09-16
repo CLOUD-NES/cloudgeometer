@@ -16,7 +16,7 @@ DEFAULT_PROXY_PORT = 8080
 DEFAULT_CA_CERT = pathlib.Path.home() / ".mitmproxy" / "mitmproxy-ca-cert.pem"
 
 
-class _RequestLogger:
+class _RequestLogAddon:
     """mitmproxy addon to log HTTP requests.
 
     Information extracted from the requests/responses are added to a multiprocessing.Queue, so that
@@ -77,10 +77,10 @@ class _ProxyProcess(multiprocessing.Process):
         super().__init__(daemon=daemon)
 
     async def _run(self) -> None:
-        request_logger = _RequestLogger(self.queue, host_filter=self.host_filter)
+        request_log_addon = _RequestLogAddon(self.queue, host_filter=self.host_filter)
         opts = options.Options(listen_host=self.host, listen_port=self.port)
         master = _Master(opts, with_termlog=False)
-        master.addons.add(request_logger)
+        master.addons.add(request_log_addon)
 
         def _watch_stop() -> None:
             self.stop.wait()

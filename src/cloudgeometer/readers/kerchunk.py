@@ -4,11 +4,11 @@ import numpy as np
 import xarray
 
 from ..s3 import S3Config
-from .base import BaseAccessor
+from .base import BaseReader
 
 
-class KerchunkAccessor(BaseAccessor):
-    """Data loader based on [xarray] and [kerchunk].
+class KerchunkReader(BaseReader):
+    """Data reader based on [xarray] and [kerchunk].
 
     [xarray]: https://docs.xarray.dev/
     [kerchunk]: https://fsspec.github.io/kerchunk/
@@ -16,7 +16,7 @@ class KerchunkAccessor(BaseAccessor):
 
     NAME = "kerchunk"
 
-    def _run(self, href: str, params: dict[str, Any]) -> np.ndarray:
+    def _read(self, href: str, params: dict[str, Any]) -> np.ndarray:
         """Load the full dataset, or a subset within a bounding box."""
         ds = xarray.open_dataset(
             href,
