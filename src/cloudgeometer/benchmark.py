@@ -1,5 +1,6 @@
 import dataclasses
 import json
+from collections import Counter
 from collections.abc import Callable
 from typing import Any
 
@@ -8,6 +9,7 @@ from .request_logger import RequestLogCollection, RequestLogger
 from .request_logger.proxy import DEFAULT_PROXY_PORT
 from .s3 import S3Config
 from .timer import Timer
+from .utils import as_human_readable_size
 
 
 @dataclasses.dataclass
@@ -36,9 +38,68 @@ class BenchmarkResults:
         num_failed_runs = len([r for r in self.runs if not r.success])
         return f"<BenchmarkResults: {len(self)} runs ({num_failed_runs} failed)>"
 
-    def summary(self, verbose=False) -> str:
-        """Print a human-readable summary of the benchmark results."""
-        return str(self.runs)
+    def summarize(self, verbose: bool = False) -> str:
+        """Return a human-readable summary of the benchmark results."""
+        failed_runs = [(i, r.error) for i, r in enumerate(self.runs, start=1) if not r.success]
+        lines = [
+            f"Runs: {len(self)} ({len(failed_runs)} failed)",
+        ]
+        if failed_runs:
+            lines.append("WARNING: failed runs:")
+            for i, error in failed_runs:
+                lines.append(f"  Run {i}: {error}")
+
+        times = [r.time for r in self.runs if r.success and r.time is not None]
+        if times:
+            lines.append("")
+            lines.append(
+                f"Execution time (successful runs only): "
+                f"min={min(times):.2f}s, max={max(times):.2f}s, avg={sum(times) / len(times):.2f}s"
+            )
+
+        logs_by_run = [r.request_logs for r in self.runs if r.request_logs is not None]
+        if logs_by_run:
+            lines.append("")
+            lines.extend(self._summarize_request_logs(logs_by_run, verbose=verbose))
+
+        return "\n".join(lines)
+
+    @staticmethod
+    def _format_log_stats(logs: RequestLogCollection, indent: str = "") -> list[str]:
+        by_method = Counter(log.method for log in logs.request_logs)
+        by_status = Counter(log.status for log in logs.request_logs)
+        return [
+            f"{indent}Requests: {len(logs)}",
+            f"{indent}  by method: " + ", ".join(f"{m}={n}" for m, n in sorted(by_method.items())),
+            f"{indent}  by status: " + ", ".join(f"{s}={n}" for s, n in sorted(by_status.items())),
+            f"{indent}Data transferred: {as_human_readable_size(logs.total_bytes)}",
+        ]
+
+    def _summarize_request_logs(
+        self, logs_by_run: list[RequestLogCollection], verbose: bool
+    ) -> list[str]:
+        lines = ["Request logs:"]
+        signatures = [Counter(logs.request_logs) for logs in logs_by_run]
+        identical = all(sig == signatures[0] for sig in signatures[1:])
+
+        if identical:
+            lines.append("  All runs have identical request logs.")
+            lines.extend(self._format_log_stats(logs_by_run[0], indent="  "))
+            if verbose:
+                lines.append("  Requests:")
+                for log in logs_by_run[0].request_logs:
+                    range_info = f", range={log.range}" if log.range else ""
+                    lines.append(
+                        f"    {log.method} {log.url} -> {log.status} "
+                        f"({as_human_readable_size(log.bytes)}{range_info})"
+                    )
+        else:
+            lines.append("  WARNING: request logs differ across runs.")
+            for i, logs in enumerate(logs_by_run, start=1):
+                lines.append(f"  Run {i}:")
+                lines.extend(self._format_log_stats(logs, indent="    "))
+
+        return lines
 
     def as_json(self) -> str:
         """Return benchmark results as a JSON-serialized string."""

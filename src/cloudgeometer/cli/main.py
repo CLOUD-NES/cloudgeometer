@@ -91,6 +91,6 @@ def run(
         s3_config=s3_config,
     )
     if not json:
-        click.echo(result.summary(verbose=verbose))
+        click.echo(result.summarize(verbose=verbose))
     else:
         click.echo(result.as_json())
