@@ -46,9 +46,17 @@ class Benchmark:
 
     Args:
         href (str): URL path to the dataset.
-        reader (str): name of the reader (should be one returned by `list_readers()`).
+        reader (str | Callable[..., Any]): name of a registered reader (should be one
+            returned by `list_readers()`), or a custom callable invoked as
+            `reader(href, **reader_params)`. When a callable is supplied, no proxy/S3
+            configuration is injected into it: with `log_requests=True`, only best-effort
+            logging via standard proxy environment variables (e.g. `HTTPS_PROXY`,
+            `CURL_CA_BUNDLE`) is applied, so libraries that don't honor those env vars
+            (e.g. GDAL-, boto3-, pyarrow-based code) won't be logged.
         reader_params (dict[str, Any] | None, optional): optional parameters supported by the
-            reader. Defaults to None.
+            reader. For a named reader these are passed as the `params` dict to its `read()`
+            method; for a custom callable they are unpacked as keyword arguments. Defaults to
+            None.
         num_runs (int, optional): include this number of runs in the benchmark. Defaults to 1.
         log_requests (bool, optional): monitor and log the HTTP requests fired by the reader.
             Defaults to False.
@@ -61,13 +69,17 @@ class Benchmark:
     def __init__(
         self,
         href: str,
-        reader: str,
+        reader: str | Callable[..., Any],
         reader_params: dict[str, Any] | None = None,
         num_runs: int = 1,
         log_requests: bool = False,
         proxy_port: int = DEFAULT_PROXY_PORT,
         s3_config: S3Config | None = None,
     ):
+        if not (isinstance(reader, str) or callable(reader)):
+            raise TypeError(
+                f"reader must be a registered reader name (str) or a callable, got {type(reader)!r}"
+            )
         self.href = href
         self.reader = reader
         self.reader_params = reader_params or {}
@@ -91,21 +103,26 @@ class Benchmark:
         )
 
     def _run_reader(self, proxy_url=None, proxy_ca_cert_file=None):
-        reader = get_reader(
-            self.reader,
-            proxy_url=proxy_url,
-            proxy_ca_cert_file=proxy_ca_cert_file,
-            s3_config=self.s3_config
-        )
-        kwargs = {"href": self.href, "params": self.reader_params}
-        results = self._run(func=reader.read, func_kwargs=kwargs)
-        return results
-
+        if isinstance(self.reader, str):
+            reader = get_reader(
+                self.reader,
+                proxy_url=proxy_url,
+                proxy_ca_cert_file=proxy_ca_cert_file,
+                s3_config=self.s3_config,
+            )
+            func = reader.read
+            kwargs = {"href": self.href, "params": self.reader_params}
+        else:
+            # Custom callables get no proxy/S3 config injected; see class docstring.
+            func = self.reader
+            kwargs = {**self.reader_params, "href": self.href}
+        return self._run(func=func, func_kwargs=kwargs)
 
     def _run_reader_with_logging(
         self,
     ) -> RunResults:
-        with RequestLogger(port=self.proxy_port, set_proxy_env_vars=False) as logger:
+        set_proxy_env_vars = not isinstance(self.reader, str)
+        with RequestLogger(port=self.proxy_port, set_proxy_env_vars=set_proxy_env_vars) as logger:
             results = self._run_reader(
                 proxy_url=logger.proxy_url, proxy_ca_cert_file=logger.proxy_ca_cert_file
             )
