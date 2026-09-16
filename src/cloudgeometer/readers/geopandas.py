@@ -35,7 +35,7 @@ class GeopandasPyarrowReader(BaseReader):
 
 
 def _setup_filesystem_if_s3(
-    href: str, proxy_url: str | None, proxy_ca_file_path: str | None, s3_config: S3Config
+    href: str, proxy_url: str | None, proxy_ca_file_path: Path | None, s3_config: S3Config
 ) -> tuple[str, pyarrow.fs.S3FileSystem | None]:
     if href.startswith("s3://"):
         filesystem = _get_pyarrow_s3_filesystem(proxy_url, proxy_ca_file_path, s3_config)
@@ -45,7 +45,7 @@ def _setup_filesystem_if_s3(
 
 
 def _get_pyarrow_s3_filesystem(
-    proxy_url: str | None, proxy_ca_file_path: str | Path | None, s3_config: S3Config
+    proxy_url: str | None, proxy_ca_file_path: Path | None, s3_config: S3Config
 ) -> pyarrow.fs.S3FileSystem:
     return pyarrow.fs.S3FileSystem(
         access_key=s3_config.access_key_id,
@@ -54,6 +54,6 @@ def _get_pyarrow_s3_filesystem(
         region=s3_config.region,
         endpoint_override=s3_config.endpoint_url,
         proxy_options=proxy_url,
-        tls_ca_file_path=str(proxy_ca_file_path),
+        tls_ca_file_path=str(proxy_ca_file_path) if proxy_ca_file_path is not None else None,
         request_timeout=DEFAULT_REQUEST_TIMEOUT,
     )

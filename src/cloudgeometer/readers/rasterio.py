@@ -1,5 +1,6 @@
 from collections.abc import Generator
 from contextlib import contextmanager
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -34,7 +35,7 @@ class RasterioReader(BaseReader):
 
 @contextmanager
 def rasterio_env(
-    proxy_url: str | None, proxy_ca_file_path: str | None, s3_config: S3Config
+    proxy_url: str | None, proxy_ca_file_path: Path | None, s3_config: S3Config
 ) -> Generator[None]:
     """Set up the rasterio environment, including proxy and S3 configurations.
 

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable, Mapping
+from pathlib import Path
 from typing import Any
 
 from ..s3 import S3Config
@@ -19,11 +20,11 @@ class BaseReader(ABC):
     def __init__(
         self,
         proxy_url: str | None = None,
-        proxy_ca_cert_file: str | None = None,
+        proxy_ca_cert_file: str | Path | None = None,
         s3_config: S3Config | None = None,
     ) -> None:
         self.proxy_url = proxy_url
-        self.proxy_ca_cert_file = proxy_ca_cert_file
+        self.proxy_ca_cert_file = Path(proxy_ca_cert_file) if proxy_ca_cert_file is not None else None
         self.s3_config = s3_config or S3Config()
 
     @classmethod

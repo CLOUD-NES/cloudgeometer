@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -36,7 +37,7 @@ class KerchunkReader(BaseReader):
 
 
 def _get_remote_options(
-    proxy_url: str | None, proxy_ca_cert_file: str | None, s3_config: S3Config
+    proxy_url: str | None, proxy_ca_cert_file: Path | None, s3_config: S3Config
 ) -> dict[str, Any]:
     """Build s3fs options for the referenced chunk data, honoring proxy and S3 configuration."""
     options: dict[str, Any] = {
