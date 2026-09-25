@@ -3,6 +3,7 @@ import multiprocessing
 import multiprocessing.synchronize
 import pathlib
 import queue
+import socket
 import threading
 import time
 
@@ -13,6 +14,18 @@ from .log import RequestLog, RequestLogCollection
 
 DEFAULT_PROXY_PORT = 8080
 DEFAULT_CA_CERT = pathlib.Path.home() / ".mitmproxy" / "mitmproxy-ca-cert.pem"
+
+
+def _find_free_port(host: str, default: int = DEFAULT_PROXY_PORT) -> int:
+    """Return default if it can be bound on host, otherwise a random free port from the OS."""
+    for port in (default, 0):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind((host, port))
+            except OSError:
+                continue
+            return s.getsockname()[1]
+    raise RuntimeError(f"No free port found on {host}")
 
 
 class _RequestLogAddon:
@@ -116,7 +129,7 @@ class Proxy:
         ca_cert: str | pathlib.Path | None = None,
     ) -> None:
         self.host_filter: str = host_filter
-        self.port: int = DEFAULT_PROXY_PORT if port is None else port
+        self.port: int = _find_free_port(self.host) if port is None else port
         self.ca_cert: pathlib.Path = DEFAULT_CA_CERT if ca_cert is None else pathlib.Path(ca_cert)
         if not self.ca_cert.exists():
             raise FileNotFoundError(
