@@ -3,7 +3,6 @@ import logging
 import click
 
 from ..readers import list_readers
-from ..request_logger.proxy import DEFAULT_PROXY_PORT
 from ..s3 import S3Config
 from .run import run_reader_benchmark
 
@@ -57,8 +56,11 @@ def cli(
 @click.option(
     "--proxy-port",
     type=int,
-    default=DEFAULT_PROXY_PORT,
-    help="Port which the proxy to log requests will listen to.",
+    default=None,
+    help=(
+        "Port which the proxy to log requests will listen to "
+        "(default is 8080 if free, otherwise a random free port)."
+    ),
 )
 @click.option("--verbose", is_flag=True, default=False, help="Increase verbosity of the output.")
 @click.option("--json", is_flag=True, default=False, help="Write output as JSON.")
@@ -69,7 +71,7 @@ def run(
     reader: str,
     num_runs: int,
     log_requests: bool,
-    proxy_port: int,
+    proxy_port: int | None,
     verbose: bool,
     json: bool,
 ):

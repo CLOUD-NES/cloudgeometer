@@ -1,7 +1,6 @@
 from typing import Any
 
 from ..benchmark import Benchmark, BenchmarkResults
-from ..request_logger.proxy import DEFAULT_PROXY_PORT
 from ..s3 import S3Config
 
 
@@ -14,7 +13,7 @@ def run_reader_benchmark(
     group: str | None = None,
     log_requests: bool = False,
     num_runs: int = 1,
-    proxy_port: int = DEFAULT_PROXY_PORT,
+    proxy_port: int | None = None,
     s3_config: S3Config | None = None,
 ) -> BenchmarkResults:
     """Perform a benchmark run with the selected reader."""

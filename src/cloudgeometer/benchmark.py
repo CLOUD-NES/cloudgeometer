@@ -6,7 +6,6 @@ from typing import Any
 
 from .readers import get_reader
 from .request_logger import RequestLogCollection, RequestLogger
-from .request_logger.proxy import DEFAULT_PROXY_PORT
 from .s3 import S3Config
 from .timer import Timer
 from .utils import as_human_readable_size
@@ -126,7 +125,7 @@ class Benchmark:
         log_requests (bool, optional): monitor and log the HTTP requests fired by the reader.
             Defaults to False.
         proxy_port (int, optional): port which the proxy used to log HTTP requests should listen to.
-            Defaults to DEFAULT_PROXY_PORT.
+            Defaults to 8080 if free, otherwise a random free port.
         s3_config (S3Config | None, optional): configuration parameters for S3 access. Defaults to
             None.
     """
@@ -138,7 +137,7 @@ class Benchmark:
         reader_params: dict[str, Any] | None = None,
         num_runs: int = 1,
         log_requests: bool = False,
-        proxy_port: int = DEFAULT_PROXY_PORT,
+        proxy_port: int | None = None,
         s3_config: S3Config | None = None,
     ):
         if not (isinstance(reader, str) or callable(reader)):
