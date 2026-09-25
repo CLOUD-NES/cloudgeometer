@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added 
+### Added
 
 - Added PyPI, DOI and license badges to README.md
+
+### Fixed
+
+- rasterio reader now properly sets AWS credentials
 
 ## [0.1.0] - 2026-09-16
 
