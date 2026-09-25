@@ -1,14 +1,13 @@
 import asyncio
-import contextlib
 import multiprocessing
 import multiprocessing.synchronize
 import pathlib
 import queue
-import socket
 import threading
 import time
 
 from mitmproxy import addons, http, master, options
+from mitmproxy.addons import errorcheck
 
 from .log import RequestLog, RequestLogCollection
 
@@ -43,6 +42,16 @@ class _RequestLogAddon:
         )
 
 
+class _ReadyAddon:
+    """mitmproxy addon to signal (to another process) that the proxy servers are up."""
+
+    def __init__(self, ready: multiprocessing.synchronize.Event) -> None:
+        self.ready = ready
+
+    def running(self) -> None:
+        self.ready.set()
+
+
 class _Master(master.Master):
     """The master handles mitmproxy's main event loop.
 
@@ -56,7 +65,8 @@ class _Master(master.Master):
         with_termlog: bool = True,
     ) -> None:
         super().__init__(options, event_loop=loop, with_termlog=with_termlog)
-        self.addons.add(*addons.default_addons())
+        # errorcheck exits the process if errors are logged at startup (e.g. port already in use)
+        self.addons.add(*addons.default_addons(), errorcheck.ErrorCheck())
 
 
 class _ProxyProcess(multiprocessing.Process):
@@ -66,6 +76,7 @@ class _ProxyProcess(multiprocessing.Process):
         port: int,
         host_filter: str,
         stop: multiprocessing.synchronize.Event,
+        ready: multiprocessing.synchronize.Event,
         queue: multiprocessing.Queue,
         daemon: bool = True,
     ) -> None:
@@ -73,14 +84,15 @@ class _ProxyProcess(multiprocessing.Process):
         self.port = port
         self.host_filter = host_filter
         self.stop = stop
+        self.ready = ready
         self.queue = queue
         super().__init__(daemon=daemon)
 
     async def _run(self) -> None:
         request_log_addon = _RequestLogAddon(self.queue, host_filter=self.host_filter)
         opts = options.Options(listen_host=self.host, listen_port=self.port)
-        master = _Master(opts, with_termlog=False)
-        master.addons.add(request_log_addon)
+        master = _Master(opts, with_termlog=True)
+        master.addons.add(request_log_addon, _ReadyAddon(self.ready))
 
         def _watch_stop() -> None:
             self.stop.wait()
@@ -113,6 +125,7 @@ class Proxy:
             )
         self._process: multiprocessing.Process | None = None
         self._stop: multiprocessing.synchronize.Event | None = None
+        self._ready: multiprocessing.synchronize.Event | None = None
         self._queue: multiprocessing.Queue = multiprocessing.Queue()
         self._request_logs: RequestLogCollection = RequestLogCollection()
 
@@ -125,11 +138,13 @@ class Proxy:
             timeout (float): seconds to wait for the proxy to start.
         """
         self._stop = multiprocessing.Event()
+        self._ready = multiprocessing.Event()
         self._process = _ProxyProcess(
             self.host,
             self.port,
             self.host_filter,
             self._stop,
+            self._ready,
             self._queue,
             daemon=True,
         )
@@ -137,16 +152,13 @@ class Proxy:
         self._wait_until_listening(timeout=timeout)
 
     def _wait_until_listening(self, timeout: float) -> None:
+        assert self._process is not None and self._ready is not None
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
-            if self._process is not None and not self._process.is_alive():
-                raise RuntimeError(f"mitmproxy exited early with code {self._process.exitcode}")
-            with (
-                contextlib.suppress(OSError),
-                socket.create_connection((self.host, self.port), timeout=0.2),
-            ):
+            if self._ready.wait(0.05):
                 return
-            time.sleep(0.05)
+            if not self._process.is_alive():
+                raise RuntimeError(f"mitmproxy exited early with code {self._process.exitcode}")
         raise RuntimeError("mitmproxy did not start listening in time")
 
     def stop(self, timeout: float = 5.0) -> None:
