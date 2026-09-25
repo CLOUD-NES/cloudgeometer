@@ -63,5 +63,8 @@ def rasterio_env(
         env["AWS_REGION"] = s3_config.region
     if s3_config.endpoint_url is not None:
         env["AWS_S3_ENDPOINT"] = s3_config.endpoint_url
-    with rasterio.Env(**env):
+    # Empty outer Env: rasterio re-sets the outermost Env's keys as GDAL config options on
+    # exit, using their prior values (e.g. its own env-var default for GDAL_CURL_CA_BUNDLE).
+    # Those options would then override the proxy env vars for later GDAL-based readers.
+    with rasterio.Env(), rasterio.Env(**env):
         yield
