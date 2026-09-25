@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - rasterio reader now properly sets AWS credentials [#2](https://github.com/CLOUD-NES/cloudgeometer/pull/2)
+- Proxy now fails loudly on busy port [#3](https://github.com/CLOUD-NES/cloudgeometer/pull/3)
 
 ## [0.1.0] - 2026-09-16
 
