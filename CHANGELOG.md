@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - rasterio reader no longer leaves GDAL config options behind, which broke SSL verification for later GDAL-based readers [#5](https://github.com/CLOUD-NES/cloudgeometer/pull/5)
 - Proxy now fails loudly on busy port [#3](https://github.com/CLOUD-NES/cloudgeometer/pull/3)
 - Request logs are no longer dropped (and stopping the proxy no longer hangs) when many requests are logged [#6](https://github.com/CLOUD-NES/cloudgeometer/pull/6)
+- Add boto3 dependency to properly setup the rasterio reader with AWS credentials. [#7](https://github.com/CLOUD-NES/cloudgeometer/pull/7)
 
 ## [0.1.0] - 2026-09-16
 
