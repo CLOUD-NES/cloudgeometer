@@ -117,6 +117,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b8/0c/51f6841f1d84f404f92463fc2b1ba0da357ca1e3db6b7fbda26956c3b82a/ruamel_yaml-0.19.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bb/69/96feeac84ce0b871567225c78515f3b557c023e72ed9b4f1833f3662bd6b/obspec-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/e7/5c595c75e9f41a44f30e526eda465ea0b4eec93470e074e4a111b253f13a/s3transfer-0.19.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/be/8a/2f6a967f30cdcd938dce5873e67c33e01c1a0a80f951abdd25a86f547d80/virtualizarr-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c9/12/a8aecc40296cb30e8011e1bb50c9916bb3b46a8bef89e3f3223cc9715477/virtual_tiff-0.5.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/cc/d7/97d3136f81db489ec8d1d67748c110d6c994268fd7528014aa9f2b085e4e/cffi-2.1.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
@@ -130,6 +131,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/e3/87/1b8c9f011d93d4362afefd1a86254b415af0eda32303d9e1e759874726a5/imagecodecs_numcodecs-2026.6.26-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e7/e6/fd7cc3340bfe0014ebfd426df5a7eceb4edb0969fa21df0eb8cef540abe3/mitmproxy_rs-0.12.11-cp312-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ef/1d/c52e66ff32ba7911664e6c4c2ac62e1c6d2d1e7550c7ac185d3f4b70a8a4/boto3-1.43.46-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f3/2f/0976d5b097ff8a22163b10617f76b2557f15f0f39d6a0fe1f02b1a53e92b/brotli-1.2.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/f3/b9/c348b19ab3845e177f08f51965db4b70ecd0563b114dbc5dcc4971b20cf9/async_geotiff-0.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f5/73/31c1bf0f3384062751c2094dadb314916d70aa9b6bfd26d994b4a7b393fa/wrapt-2.3.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl
@@ -231,6 +233,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b8/0c/51f6841f1d84f404f92463fc2b1ba0da357ca1e3db6b7fbda26956c3b82a/ruamel_yaml-0.19.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bb/69/96feeac84ce0b871567225c78515f3b557c023e72ed9b4f1833f3662bd6b/obspec-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/e7/5c595c75e9f41a44f30e526eda465ea0b4eec93470e074e4a111b253f13a/s3transfer-0.19.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bd/9c/4d95bb87eb2063d20db7b60faa3840c1b18025517ae857371c4dd55a6b3a/pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/be/8a/2f6a967f30cdcd938dce5873e67c33e01c1a0a80f951abdd25a86f547d80/virtualizarr-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c0/89/76534ad8f01d952ad01002741f8cfac08024035a70952f190b4f7e22325c/pyogrio-0.13.0-cp311-abi3-macosx_12_0_arm64.whl
@@ -244,6 +247,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/e3/87/1b8c9f011d93d4362afefd1a86254b415af0eda32303d9e1e759874726a5/imagecodecs_numcodecs-2026.6.26-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e7/62/edd2613649cb6b4400f5d125223ee094d2da1c4c93636453a5360c61b865/obstore-0.11.1-cp311-abi3-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ef/1d/c52e66ff32ba7911664e6c4c2ac62e1c6d2d1e7550c7ac185d3f4b70a8a4/boto3-1.43.46-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f1/4f/733c48f270565d78b4544f2baddc2fb2a245e5a8640254b12c36ac7ac68e/multidict-6.7.1-cp314-cp314-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/f3/b9/c348b19ab3845e177f08f51965db4b70ecd0563b114dbc5dcc4971b20cf9/async_geotiff-0.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
@@ -356,6 +360,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b8/0c/51f6841f1d84f404f92463fc2b1ba0da357ca1e3db6b7fbda26956c3b82a/ruamel_yaml-0.19.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bb/69/96feeac84ce0b871567225c78515f3b557c023e72ed9b4f1833f3662bd6b/obspec-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/e7/5c595c75e9f41a44f30e526eda465ea0b4eec93470e074e4a111b253f13a/s3transfer-0.19.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/be/8a/2f6a967f30cdcd938dce5873e67c33e01c1a0a80f951abdd25a86f547d80/virtualizarr-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c7/b2/c9fba5b4ed7f63f26e83432fa2062ca04606b61dce7bbacc1238232af649/ty-0.0.81-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/c9/12/a8aecc40296cb30e8011e1bb50c9916bb3b46a8bef89e3f3223cc9715477/virtual_tiff-0.5.0-py3-none-any.whl
@@ -371,6 +376,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/e3/87/1b8c9f011d93d4362afefd1a86254b415af0eda32303d9e1e759874726a5/imagecodecs_numcodecs-2026.6.26-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e7/e6/fd7cc3340bfe0014ebfd426df5a7eceb4edb0969fa21df0eb8cef540abe3/mitmproxy_rs-0.12.11-cp312-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ef/1d/c52e66ff32ba7911664e6c4c2ac62e1c6d2d1e7550c7ac185d3f4b70a8a4/boto3-1.43.46-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f3/2f/0976d5b097ff8a22163b10617f76b2557f15f0f39d6a0fe1f02b1a53e92b/brotli-1.2.0-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/f3/b9/c348b19ab3845e177f08f51965db4b70ecd0563b114dbc5dcc4971b20cf9/async_geotiff-0.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl
@@ -476,6 +482,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b8/0c/51f6841f1d84f404f92463fc2b1ba0da357ca1e3db6b7fbda26956c3b82a/ruamel_yaml-0.19.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bb/69/96feeac84ce0b871567225c78515f3b557c023e72ed9b4f1833f3662bd6b/obspec-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/bc/e7/5c595c75e9f41a44f30e526eda465ea0b4eec93470e074e4a111b253f13a/s3transfer-0.19.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bd/9c/4d95bb87eb2063d20db7b60faa3840c1b18025517ae857371c4dd55a6b3a/pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/be/8a/2f6a967f30cdcd938dce5873e67c33e01c1a0a80f951abdd25a86f547d80/virtualizarr-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c0/89/76534ad8f01d952ad01002741f8cfac08024035a70952f190b4f7e22325c/pyogrio-0.13.0-cp311-abi3-macosx_12_0_arm64.whl
@@ -490,6 +497,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/e3/87/1b8c9f011d93d4362afefd1a86254b415af0eda32303d9e1e759874726a5/imagecodecs_numcodecs-2026.6.26-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e7/62/edd2613649cb6b4400f5d125223ee094d2da1c4c93636453a5360c61b865/obstore-0.11.1-cp311-abi3-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ef/1d/c52e66ff32ba7911664e6c4c2ac62e1c6d2d1e7550c7ac185d3f4b70a8a4/boto3-1.43.46-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f1/4f/733c48f270565d78b4544f2baddc2fb2a245e5a8640254b12c36ac7ac68e/multidict-6.7.1-cp314-cp314-macosx_11_0_arm64.whl
       - pypi: https://files.pythonhosted.org/packages/f3/b9/c348b19ab3845e177f08f51965db4b70ecd0563b114dbc5dcc4971b20cf9/async_geotiff-0.5.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f4/7e/a72dd26f3b0f4f2bf1dd8923c85f7ceb43172af56d63c7383eb62b332364/pygments-2.20.0-py3-none-any.whl
@@ -1056,6 +1064,7 @@ packages:
   - geopandas>=1.1.4,<2
   - pyarrow>=25.0.1,<26
   - obstore>=0.11.1,<0.12
+  - boto3>=1.43.46,<2
   - pytest>=9.1.1,<10 ; extra == 'dev'
   - ruff>=0.16.7,<0.17 ; extra == 'dev'
   - ty>=0.0.81,<0.0.82 ; extra == 'dev'
@@ -2129,6 +2138,14 @@ packages:
   requires_dist:
   - typing-extensions ; python_full_version < '3.12'
   requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/bc/e7/5c595c75e9f41a44f30e526eda465ea0b4eec93470e074e4a111b253f13a/s3transfer-0.19.2-py3-none-any.whl
+  name: s3transfer
+  version: 0.19.2
+  sha256: d8168eccca828cbb2cd573675333f3bddd254313a9c42494b84c76b539e8ba25
+  requires_dist:
+  - botocore>=1.37.4,<2.0a0
+  - botocore[crt]>=1.37.4,<2.0a0 ; extra == 'crt'
+  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/bd/9c/4d95bb87eb2063d20db7b60faa3840c1b18025517ae857371c4dd55a6b3a/pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl
   name: pyyaml
   version: 6.0.3
@@ -2402,6 +2419,16 @@ packages:
   requires_dist:
   - six>=1.5
   requires_python: '>=2.7,!=3.0.*,!=3.1.*,!=3.2.*'
+- pypi: https://files.pythonhosted.org/packages/ef/1d/c52e66ff32ba7911664e6c4c2ac62e1c6d2d1e7550c7ac185d3f4b70a8a4/boto3-1.43.46-py3-none-any.whl
+  name: boto3
+  version: 1.43.46
+  sha256: 69453e2c1bcb9fd9806527ab99950cacfc2826cb0dce9a3a0414d19270c06c3c
+  requires_dist:
+  - botocore>=1.43.46,<1.44.0
+  - jmespath>=0.7.1,<2.0.0
+  - s3transfer>=0.19.0,<0.20.0
+  - botocore[crt]>=1.21.0,<2.0a0 ; extra == 'crt'
+  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/f1/4f/733c48f270565d78b4544f2baddc2fb2a245e5a8640254b12c36ac7ac68e/multidict-6.7.1-cp314-cp314-macosx_11_0_arm64.whl
   name: multidict
   version: 6.7.1
