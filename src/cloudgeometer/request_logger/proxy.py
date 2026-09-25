@@ -186,10 +186,15 @@ class Proxy:
         if self._stop is not None:
             self._stop.set()
         if self._process is not None:
-            self._process.join(timeout=timeout)
+            # keep draining the queue: the process cannot exit while its queue pipe is full
+            deadline = time.monotonic() + timeout
+            while self._process.is_alive() and time.monotonic() < deadline:
+                self._request_logs.extend(self._drain_queue())
+                self._process.join(0.05)
             if self._process.is_alive():
                 self._process.terminate()
                 self._process.join(timeout=timeout)
+            self._request_logs.extend(self._drain_queue())
             self._process = None
 
     @property
