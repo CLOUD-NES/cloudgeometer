@@ -1,4 +1,4 @@
-# Cloudgeometer
+# Cloudgeometer <a href="https://github.com/CLOUD-NES/cloudgeometer"><img src="docs/logo/logo.png" align="right" height="250" alt="cloudgeometer logo" /></a>
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22802591.svg)](https://doi.org/10.5281/zenodo.22802591)
 [![PyPI](https://img.shields.io/pypi/v/cloudgeometer.svg?colorB=blue)](https://pypi.python.org/project/cloudgeometer/)
