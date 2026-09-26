@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added PyPI, DOI and license badges to README.md
+- Add a logo [#8](https://github.com/CLOUD-NES/cloudgeometer/pull/8)
 
 ### Changed
 
