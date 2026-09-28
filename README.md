@@ -26,9 +26,9 @@ git clone git@github.com:CLOUD-NES/cloudgeometer.git
 cd cloudgeometer
 ```
 
-We recommend to install cloudgeometer in a virtual environment, using either `pixi` and `uv` (but other virtual environment managers like Python `venv` and `conda` can be used as well).
+We recommend to install cloudgeometer in a virtual environment, using either `pixi` or `uv` (but other virtual environment managers like Python `venv` and `conda` can be used as well).
 
-## `pixi`
+### `pixi`
 
 ```shell
 pixi install
@@ -40,7 +40,7 @@ pixi run lint
 pixi run ty
 ```
 
-## `uv`
+### `uv`
 
 ```shell
 uv sync --extra dev
