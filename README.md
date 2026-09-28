@@ -9,7 +9,7 @@
 
 Cloudgeometer is a tool to facilitate running data access geospatial benchmarks on cloud-native infrastructure.
 
-## Install
+## Installation
 
 Cloudgeometer is distributed on [PyPI](https://pypi.org/), and can be installed with `pip`:
 
