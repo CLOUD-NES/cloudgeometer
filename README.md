@@ -9,6 +9,65 @@
 
 Cloudgeometer is a tool to facilitate running data access geospatial benchmarks on cloud-native infrastructure.
 
+## Installation
+
+Cloudgeometer is distributed on [PyPI](https://pypi.org/), and can be installed with `pip`:
+
+```shell
+pip install cloudgeometer
+```
+
+## Examples
+
+### Log HTTP requests with `RequestLogger`
+
+Use `RequestLogger` as a context manager to log the HTTP requests sent while reading remote data.
+
+For instance, loading a GeoTIFF with [rasterio](https://rasterio.readthedocs.io):
+
+```python
+import rasterio
+from cloudgeometer import RequestLogger
+
+href = "s3://example-bucket/path/to/image.tif"
+
+with RequestLogger() as logger:
+    with rasterio.Env(
+        AWS_NO_SIGN_REQUEST="YES",
+    ), rasterio.open(href) as dataset:
+        data = dataset.read(1)
+
+print(logger.logs)
+# <5 requests, response size: 1.2 MB>
+
+logs = logger.logs.to_df()
+# request log table: method, url, status, bytes, range
+```
+
+### Run a benchmark with `Benchmark`
+
+Wrap the same reading logic in a function, then pass it to `Benchmark` to time multiple runs:
+
+```python
+import rasterio
+from cloudgeometer import Benchmark
+
+def read_band(href, band=1):
+    with rasterio.Env(
+        AWS_NO_SIGN_REQUEST="YES"
+    ), rasterio.open(href) as dataset:
+        return dataset.read(band)
+
+benchmark = Benchmark(
+    href="s3://example-bucket/path/to/image.tif",
+    reader=read_band,
+    reader_params={"band": 1},
+    num_runs=5,
+)
+results = benchmark.run()
+print(results.summarize())
+```
+
 ## Developing
 
 Clone and access the GitHub repository:
@@ -18,9 +77,9 @@ git clone git@github.com:CLOUD-NES/cloudgeometer.git
 cd cloudgeometer
 ```
 
-We recommend to install cloudgeometer in a virtual environment, using either `pixi` and `uv` (but other virtual environment managers like Python `venv` and `conda` can be used as well).
+We recommend to install cloudgeometer in a virtual environment, using either `pixi` or `uv` (but other virtual environment managers like Python `venv` and `conda` can be used as well).
 
-## `pixi`
+### `pixi`
 
 ```shell
 pixi install
@@ -32,7 +91,7 @@ pixi run lint
 pixi run ty
 ```
 
-## `uv`
+### `uv`
 
 ```shell
 uv sync --extra dev
