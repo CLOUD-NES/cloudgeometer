@@ -193,7 +193,7 @@ class Benchmark:
         results.request_logs = logger.logs
         return results
 
-    def run(self):
+    def run(self) -> BenchmarkResults:
         """Run the benchmark.
 
         Returns:

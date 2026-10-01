@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a logo [#8](https://github.com/CLOUD-NES/cloudgeometer/pull/8)
 - Included examples in README, installation instructions from PyPI, DOI to CITATION.cff [#11](https://github.com/CLOUD-NES/cloudgeometer/pull/11)
 - Add contributing guidelines and code of conduct [#14](https://github.com/CLOUD-NES/cloudgeometer/pull/14)
+- Add documentation website, deployed on GitHub Pages [#15](https://github.com/CLOUD-NES/cloudgeometer/pull/15)
 
 ### Changed
 

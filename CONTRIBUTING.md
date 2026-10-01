@@ -1,6 +1,6 @@
 # Contributing guidelines
 
-We welcome any kind of contribution to our software, from simple comment or question to a full fledged [pull request](https://docs.github.com/articles/about-pull-requests/). Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+We welcome any kind of contribution to our software, from simple comment or question to a full fledged [pull request](https://docs.github.com/articles/about-pull-requests/). Please read and follow our [Code of Conduct](https://github.com/CLOUD-NES/cloudgeometer/blob/main/CODE_OF_CONDUCT.md).
 
 A contribution can be one of the following cases:
 
@@ -32,9 +32,9 @@ in line with what is recommended there. If not, please [contribute to the guide]
 1. (**important**) announce your plan to the rest of the community _before you start working_. This announcement should be in the form of a (new) issue;
 1. (**important**) wait until some kind of consensus is reached about your idea being a good idea;
 1. if needed, fork the repository to your own Github profile and create your own feature branch off of the latest main commit. While working on your feature branch, make sure to stay up to date with the main branch by pulling in changes, possibly from the 'upstream' repository (follow the instructions [here](https://docs.github.com/articles/configuring-a-remote-for-a-fork/) and [here](https://docs.github.com/articles/syncing-a-fork/));
-1. install dependencies (see the [development section of the README](README.md#developing));
+1. install dependencies (see the [development section of the README](https://github.com/CLOUD-NES/cloudgeometer/blob/main/README.md#developing));
 1. make sure the existing tests still work by running ``pixi run test`` (or ``uv run pytest``);
-1. make sure lint and type checks pass by running ``pixi run lint`` and ``pixi run ty`` (or the ``uv`` equivalents in the [README](README.md#developing));
+1. make sure lint and type checks pass by running ``pixi run lint`` and ``pixi run ty`` (or the ``uv`` equivalents in the [README](https://github.com/CLOUD-NES/cloudgeometer/blob/main/README.md#developing));
 1. add your own tests (if necessary);
 1. update or expand the documentation;
 1. update the `CHANGELOG.md` file with your change;
@@ -47,12 +47,12 @@ In case you feel like you've made a valuable contribution, but you don't know ho
 
 To create a release you need write permission on the repository.
 
-1. Check the author list in [`CITATION.cff`](CITATION.cff)
+1. Check the author list in [`CITATION.cff`](https://github.com/CLOUD-NES/cloudgeometer/blob/main/CITATION.cff)
 1. Update the version number in `pyproject.toml`
 1. Update the `CHANGELOG.md` to include changes made
 1. Go to the [GitHub release page](https://github.com/CLOUD-NES/cloudgeometer/releases)
 1. Press draft a new release button
 1. Fill version, title and description field
-1. Press the Publish Release button. This triggers the [publish workflow](.github/workflows/publish.yml), which uploads the package to PyPI
+1. Press the Publish Release button. This triggers the [publish workflow](https://github.com/CLOUD-NES/cloudgeometer/blob/main/.github/workflows/publish.yml), which uploads the package to PyPI
 
 Also a Zenodo entry will be made for the release with its own DOI.
