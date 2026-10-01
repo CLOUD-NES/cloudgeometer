@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Pick a free proxy port when none is specified - [#4](https://github.com/CLOUD-NES/cloudgeometer/pull/4)
+- Minor changes in rasterio reader config [#12](https://github.com/CLOUD-NES/cloudgeometer/pull/12)
 - Proxy certificates are automatically generated on first usage [#13](https://github.com/CLOUD-NES/cloudgeometer/pull/13)
 
 ### Fixed
