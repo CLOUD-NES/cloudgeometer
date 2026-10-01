@@ -7,13 +7,14 @@ import socket
 import threading
 import time
 
-from mitmproxy import addons, http, master, options
+from mitmproxy import addons, certs, http, master, options
 from mitmproxy.addons import errorcheck
+from mitmproxy.options import CONF_BASENAME, KEY_SIZE
 
 from .log import RequestLog, RequestLogCollection
 
 DEFAULT_PROXY_PORT = 8080
-DEFAULT_CA_CERT = pathlib.Path.home() / ".mitmproxy" / "mitmproxy-ca-cert.pem"
+DEFAULT_CA_CERT = pathlib.Path.home() / ".mitmproxy" / f"{CONF_BASENAME}-ca-cert.pem"
 
 
 def _find_free_port(host: str, default: int = DEFAULT_PROXY_PORT) -> int:
@@ -131,11 +132,11 @@ class Proxy:
         self.host_filter: str = host_filter
         self.port: int = _find_free_port(self.host) if port is None else port
         self.ca_cert: pathlib.Path = DEFAULT_CA_CERT if ca_cert is None else pathlib.Path(ca_cert)
+        # mitmproxy reads its CA from the default location: only generate it there
+        if ca_cert is None and not self.ca_cert.exists():
+            certs.CertStore.create_store(self.ca_cert.parent, CONF_BASENAME, KEY_SIZE)
         if not self.ca_cert.exists():
-            raise FileNotFoundError(
-                f"mitmproxy CA certificate not found at {self.ca_cert}. "
-                "Run `mitmdump` once (Ctrl+C after a second) to generate it."
-            )
+            raise FileNotFoundError(f"mitmproxy CA certificate not found at {self.ca_cert}.")
         self._process: multiprocessing.Process | None = None
         self._stop: multiprocessing.synchronize.Event | None = None
         self._ready: multiprocessing.synchronize.Event | None = None
