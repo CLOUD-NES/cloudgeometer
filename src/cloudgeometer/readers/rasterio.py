@@ -48,7 +48,8 @@ def rasterio_env(
         None: control is yielded within the configured rasterio environment
     """
     env = {
-        "GDAL_DISABLE_READDIR_ON_OPEN": True,
+        "GDAL_DISABLE_READDIR_ON_OPEN": "EMPTY_DIR",
+        "AWS_VIRTUAL_HOSTING": False,
         "AWS_NO_SIGN_REQUEST": "YES" if s3_config.is_anonymous else "NO",
     }
     if proxy_url is not None:
